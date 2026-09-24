@@ -1,0 +1,5 @@
+# Salesforce DX .forceignore
+.forceIgnore
+**/node_modules
+**/.git
+*.lock

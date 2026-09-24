@@ -1,0 +1,27 @@
+name: Salesforce CI Pipeline
+
+on:
+  pull_request:
+    branches: [main, uat]
+  push:
+    branches: [main, uat]
+
+jobs:
+  validate:
+    name: Validate Metadata
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Salesforce CLI
+        run: npm install -g @salesforce/cli
+      - name: Validate deployment
+        run: echo "Validation step — connect org credentials to enable"
+
+  apex-tests:
+    name: Run Apex Tests
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Apex Tests
+        run: echo "Apex test step — connect org credentials to enable"
