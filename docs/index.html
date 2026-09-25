@@ -2,247 +2,266 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Siemens Salesforce DevOps Dashboard</title>
 <style>
-  :root { color-scheme: light; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: #F2F5FA; color: #2C3E50; font-size: 14px; }
-  .topbar { position: sticky; top: 0; z-index: 100; background: #0B3D7A; color: #fff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
-  .topbar h1 { font-size: 18px; font-weight: 600; letter-spacing: 0.5px; }
-  .topbar .refresh { font-size: 12px; opacity: 0.85; }
-  .container { max-width: 1280px; margin: 0 auto; padding: 20px; }
-  .section { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-  .section h2 { font-size: 15px; font-weight: 600; color: #0B3D7A; margin-bottom: 16px; border-bottom: 2px solid #EEF3FB; padding-bottom: 8px; }
-  .kpi-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 20px; }
-  .kpi-tile { background: #fff; border-radius: 8px; padding: 16px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-top: 3px solid #1058B0; }
-  .kpi-tile .val { font-size: 28px; font-weight: 700; color: #1058B0; }
-  .kpi-tile .lbl { font-size: 11px; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .health-row { display: grid; grid-template-columns: 240px 1fr; gap: 24px; align-items: start; }
-  .donut-wrap { display: flex; flex-direction: column; align-items: center; }
-  .donut-wrap .grade { font-size: 20px; font-weight: 700; margin-top: 10px; color: #B91C1C; }
-  .donut-wrap .score-label { font-size: 13px; color: #666; }
-  .factors { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .factor { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; border-radius: 6px; background: #F2F5FA; font-size: 12px; }
-  .factor .pts { font-weight: 700; padding: 2px 7px; border-radius: 10px; font-size: 11px; }
-  .pos { background: #dcfce7; color: #1A7A4A; }
-  .neg { background: #fee2e2; color: #B91C1C; }
-  .bar-row { margin-bottom: 10px; }
-  .bar-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px; }
-  .bar-bg { background: #EEF3FB; border-radius: 4px; height: 10px; overflow: hidden; }
-  .bar-fill { height: 100%; border-radius: 4px; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { background: #EEF3FB; color: #0B3D7A; font-weight: 600; padding: 8px 10px; text-align: left; }
-  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; }
-  tr:hover td { background: #fafbfd; }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
-  .badge-green { background: #dcfce7; color: #1A7A4A; }
-  .badge-amber { background: #fef3c7; color: #B45309; }
-  .badge-red { background: #fee2e2; color: #B91C1C; }
-  .badge-blue { background: #EEF3FB; color: #1058B0; }
-  .badge-gray { background: #f0f0f0; color: #555; }
-  .flows-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; max-height: 360px; overflow-y: auto; }
-  .flow-tag { background: #EEF3FB; border-radius: 6px; padding: 6px 10px; font-size: 11px; color: #1058B0; border-left: 3px solid #1058B0; }
-  .flow-tag.auto { border-left-color: #1A7A4A; color: #1A7A4A; background: #f0fdf4; }
-  .flow-tag.orch { border-left-color: #B45309; color: #B45309; background: #fffbeb; }
-  .pr-card { border: 1px solid #e0e7ef; border-radius: 8px; padding: 14px; margin-bottom: 10px; background: #fff; }
-  .pr-card .pr-title { font-weight: 600; color: #1058B0; text-decoration: none; font-size: 14px; }
-  .pr-card .pr-title:hover { text-decoration: underline; }
-  .pr-meta { font-size: 12px; color: #666; margin-top: 6px; display: flex; gap: 12px; flex-wrap: wrap; }
-  footer { text-align: center; font-size: 11px; color: #888; margin: 24px 0 12px; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+:root { color-scheme: light; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #F2F5FA; color: #2C3E50; font-size: 14px; }
+.topbar { position: sticky; top: 0; z-index: 100; background: #0B3D7A; color: #fff; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.topbar h1 { font-size: 18px; font-weight: 600; letter-spacing: 0.5px; }
+.topbar .refresh { font-size: 12px; opacity: 0.85; background: rgba(255,255,255,0.15); padding: 4px 10px; border-radius: 12px; }
+.container { max-width: 1280px; margin: 0 auto; padding: 20px; }
+.section-title { font-size: 15px; font-weight: 700; color: #0B3D7A; margin: 24px 0 12px; border-left: 4px solid #1058B0; padding-left: 10px; }
+.card { background: #fff; border-radius: 8px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.kpi-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 20px; }
+.kpi-tile { background: #fff; border-radius: 8px; padding: 16px 12px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-top: 3px solid #1058B0; }
+.kpi-tile .val { font-size: 28px; font-weight: 700; color: #0B3D7A; }
+.kpi-tile .lbl { font-size: 11px; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.health-row { display: grid; grid-template-columns: 220px 1fr; gap: 20px; padding: 20px; }
+.donut-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.factors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.factor { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; border-radius: 6px; font-size: 12px; }
+.factor.green { background: #d1fae5; color: #065f46; }
+.factor.amber { background: #fef3c7; color: #92400e; }
+.factor.red { background: #fee2e2; color: #991b1b; }
+.factor .badge { font-weight: 700; font-size: 12px; }
+.progress-bar-wrap { margin-bottom: 10px; }
+.progress-bar-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px; }
+.progress-bar { height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; }
+.progress-bar-fill { height: 100%; border-radius: 5px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: #EEF3FB; color: #0B3D7A; text-align: left; padding: 8px 10px; font-weight: 600; border-bottom: 2px solid #1058B0; }
+td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8faff; }
+.badge-pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.badge-active { background: #d1fae5; color: #065f46; }
+.badge-inactive { background: #fee2e2; color: #991b1b; }
+.badge-waiting { background: #dbeafe; color: #1e40af; }
+.badge-completed { background: #d1fae5; color: #065f46; }
+.badge-aborted { background: #fee2e2; color: #991b1b; }
+.badge-flow { background: #ede9fe; color: #5b21b6; }
+.badge-auto { background: #e0f2fe; color: #0369a1; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.footer { text-align: center; padding: 20px; font-size: 12px; color: #888; border-top: 1px solid #e2e8f0; margin-top: 24px; }
+.footer a { color: #1058B0; text-decoration: none; }
+.no-data { text-align: center; padding: 20px; color: #999; font-style: italic; }
+@media (max-width: 900px) {
+  .kpi-strip { grid-template-columns: repeat(3, 1fr); }
+  .health-row { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 <div class="topbar">
-  <h1>&#127959; Siemens Salesforce DevOps Dashboard</h1>
-  <span class="refresh">Last refreshed: 25 Sep 2026, 09:28 IST</span>
+  <h1>🔷 Siemens Salesforce DevOps</h1>
+  <span class="refresh">Last refreshed: 25 Sep 2026, 10:13 AM IST</span>
 </div>
 <div class="container">
 
-  <!-- KPI Strip -->
-  <div class="kpi-strip">
-    <div class="kpi-tile"><div class="val">1</div><div class="lbl">Active Users</div></div>
-    <div class="kpi-tile"><div class="val">32</div><div class="lbl">Apex Classes</div></div>
-    <div class="kpi-tile"><div class="val">311</div><div class="lbl">Active Flows</div></div>
-    <div class="kpi-tile"><div class="val">7</div><div class="lbl">Scheduled Jobs</div></div>
-    <div class="kpi-tile"><div class="val">&lt;0.01%</div><div class="lbl">API Usage</div></div>
-    <div class="kpi-tile"><div class="val">1</div><div class="lbl">Open PRs</div></div>
-  </div>
-
-  <!-- Health Score -->
-  <div class="section">
-    <h2>&#9889; Org Health Score</h2>
-    <div class="health-row">
-      <div class="donut-wrap">
-        <svg width="180" height="180" viewBox="0 0 180 180">
-          <circle cx="90" cy="90" r="70" fill="none" stroke="#EEF3FB" stroke-width="22"/>
-          <circle cx="90" cy="90" r="70" fill="none" stroke="#B91C1C" stroke-width="22"
-            stroke-dasharray="197.9 242.2" stroke-dashoffset="60.5" stroke-linecap="round"/>
-          <text x="90" y="86" text-anchor="middle" font-size="32" font-weight="700" fill="#B91C1C">44</text>
-          <text x="90" y="108" text-anchor="middle" font-size="13" fill="#666">/100</text>
-        </svg>
-        <div class="grade">&#128721; Needs Attention</div>
-        <div class="score-label">Overall Org Health</div>
-      </div>
-      <div class="factors">
-        <div class="factor">API Usage &lt; 10% <span class="pts pos">+20</span></div>
-        <div class="factor">Data Storage &lt; 50% <span class="pts pos">+15</span></div>
-        <div class="factor">Active Flows &gt; 0 <span class="pts pos">+15</span></div>
-        <div class="factor">All Scheduled Jobs WAITING <span class="pts pos">+10</span></div>
-        <div class="factor">Apex Classes Active <span class="pts pos">+10</span></div>
-        <div class="factor">No Apex Triggers <span class="pts pos">+2</span></div>
-        <div class="factor">Aborted Async Jobs (1×8) <span class="pts neg">-8</span></div>
-        <div class="factor">&gt;80% Users Never Logged In <span class="pts neg">-8</span></div>
-        <div class="factor">No Apex Test Results <span class="pts neg">-12</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Org Limits -->
-  <div class="section">
-    <h2>&#128202; Org Limits</h2>
-    <div class="bar-row">
-      <div class="bar-label"><span>Daily API Requests</span><span>9 / 441,450 (0.002%)</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:0.002%;background:#1A7A4A;"></div></div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label"><span>Data Storage (MB)</span><span>0 / 52,537 (0%)</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:0%;background:#1A7A4A;min-width:4px;"></div></div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label"><span>File Storage (MB)</span><span>2 / 134,712 (&lt;0.01%)</span></div>
-      <div class="bar-bg"><div class="bar-fill" style="width:0.01%;background:#1A7A4A;min-width:4px;"></div></div>
-    </div>
-  </div>
-
-  <!-- User Activity -->
-  <div class="section">
-    <h2>&#128100; User Activity (Recent 10)</h2>
-    <table>
-      <thead><tr><th>Name</th><th>Active</th><th>User Type</th><th>Last Login</th></tr></thead>
-      <tbody>
-        <tr><td>Akshay Kumar</td><td><span class="badge badge-green">Active</span></td><td>Standard</td><td>25 Sep 2026, 03:45 UTC</td></tr>
-        <tr><td>B2BMA Integration</td><td><span class="badge badge-green">Active</span></td><td>Standard</td><td><span class="badge badge-amber">Never</span></td></tr>
-        <tr><td>SalesforceIQ Integration</td><td><span class="badge badge-green">Active</span></td><td>Standard</td><td><span class="badge badge-amber">Never</span></td></tr>
-        <tr><td>Insights Integration</td><td><span class="badge badge-green">Active</span></td><td>Standard</td><td><span class="badge badge-amber">Never</span></td></tr>
-        <tr><td>Data.com Clean</td><td><span class="badge badge-green">Active</span></td><td>AutomatedProcess</td><td><span class="badge badge-amber">Never</span></td></tr>
-        <tr><td>Integration User</td><td><span class="badge badge-green">Active</span></td><td>Standard</td><td><span class="badge badge-amber">Never</span></td></tr>
-        <tr><td>Automated Process</td><td><span class="badge badge-green">Active</span></td><td>AutomatedProcess</td><td><span class="badge badge-amber">Never</span></td></tr>
-        <tr><td>Commerce</td><td><span class="badge badge-green">Active</span></td><td>AutomatedProcess</td><td><span class="badge badge-amber">Never</span></td></tr>
-        <tr><td>Chatter Expert</td><td><span class="badge badge-green">Active</span></td><td>CsnOnly</td><td><span class="badge badge-amber">Never</span></td></tr>
-        <tr><td>Platform Integration User</td><td><span class="badge badge-green">Active</span></td><td>CloudIntegrationUser</td><td><span class="badge badge-amber">Never</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Active Flows -->
-  <div class="section">
-    <h2>&#9889; Active Flows (311 total) — Sample by ProcessType</h2>
-    <div class="flows-grid">
-      <div class="flow-tag auto">AutoLaunchedFlow: Field Service Flows (×20+)</div>
-      <div class="flow-tag">Flow: Manage Work Orders</div>
-      <div class="flow-tag orch">Orchestrator: Process Application for Financial Assistance</div>
-      <div class="flow-tag auto">AutoLaunchedFlow: Create Billing Transaction Graph</div>
-      <div class="flow-tag auto">AutoLaunchedFlow: Check Patient Eligibility</div>
-      <div class="flow-tag">Flow: Patient Registration</div>
-      <div class="flow-tag">Flow: Program Enrollment</div>
-      <div class="flow-tag orch">Orchestrator: Process Advanced Therapy Work Orders</div>
-      <div class="flow-tag auto">AutoLaunchedFlow: Generate Campaign From Brief</div>
-      <div class="flow-tag">Flow: Create IT Ticket</div>
-      <div class="flow-tag">ApprovalWorkflow: IT Service Manager Approval</div>
-      <div class="flow-tag">RoutingFlow: Chats to Agents and Queues</div>
-      <div class="flow-tag">Appointments: Outbound New Appointment</div>
-      <div class="flow-tag">CheckoutFlow: Checkout Flow Template</div>
-      <div class="flow-tag auto">AutoLaunchedFlow: Asset Management (×30+)</div>
-      <div class="flow-tag auto">AutoLaunchedFlow: Service Process Flows (×20+)</div>
-      <div class="flow-tag">EvaluationFlow: CMS Workflow</div>
-      <div class="flow-tag">Flow: Verify Customer Identity</div>
-      <div class="flow-tag">Flow: Collections Capture Interaction</div>
-      <div class="flow-tag">IndividualObjectLinkingFlow: Find Contact for Messaging</div>
-    </div>
-    <p style="font-size:12px;color:#888;margin-top:10px;">Showing representative sample of 311 active flows across: AutoLaunchedFlow, Flow, Orchestrator, ApprovalWorkflow, RoutingFlow, Appointments, CheckoutFlow, EvaluationFlow and more.</p>
-  </div>
-
-  <div class="two-col">
-    <!-- Scheduled Jobs -->
-    <div class="section">
-      <h2>&#128336; Scheduled Jobs (7)</h2>
-      <table>
-        <thead><tr><th>Job Name</th><th>State</th><th>Next Fire</th></tr></thead>
-        <tbody>
-          <tr><td>ObligationCronJob</td><td><span class="badge badge-green">WAITING</span></td><td>25 Sep, 15:00 UTC</td></tr>
-          <tr><td>SRT Semantic Graph Edge Update</td><td><span class="badge badge-green">WAITING</span></td><td>20 Oct, 20:56 UTC</td></tr>
-          <tr><td>ReportType Edge Data Loader</td><td><span class="badge badge-green">WAITING</span></td><td>29 Sep, 19:18 UTC</td></tr>
-          <tr><td>Program Milestone Computation</td><td><span class="badge badge-green">WAITING</span></td><td>25 Sep, 07:59 UTC</td></tr>
-          <tr><td>Program Status Update</td><td><span class="badge badge-green">WAITING</span></td><td>25 Sep, 11:00 UTC</td></tr>
-          <tr><td>Retention Usage</td><td><span class="badge badge-green">WAITING</span></td><td>25 Sep, 15:00 UTC</td></tr>
-          <tr><td>Privacy Center Audit</td><td><span class="badge badge-green">WAITING</span></td><td>25 Sep, 05:00 UTC</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Async Jobs -->
-    <div class="section">
-      <h2>&#9881; Async Apex Jobs (Last 10)</h2>
-      <table>
-        <thead><tr><th>Status</th><th>Type</th><th>Errors</th><th>Created</th></tr></thead>
-        <tbody>
-          <tr><td><span class="badge badge-green">Completed</span></td><td>Future</td><td>0</td><td>20 Sep 2026</td></tr>
-          <tr><td><span class="badge badge-red">Aborted</span></td><td>ScheduledApex</td><td>0</td><td>20 Sep 2026</td></tr>
-        </tbody>
-      </table>
-      <br>
-      <h2>&#9989; Apex Test Results</h2>
-      <p style="color:#B91C1C;font-size:13px;padding:10px;background:#fee2e2;border-radius:6px;">&#9888; No test results found. Run Apex tests to ensure code quality.</p>
-    </div>
-  </div>
-
-  <!-- Open PRs -->
-  <div class="section">
-    <h2>&#128101; Pull Requests — Open (1)</h2>
-    <div class="pr-card">
-      <a href="https://github.com/Akshay-0502/Salesforce/pull/1" class="pr-title" target="_blank">#1 feat: DevOpsDashboardService — org health metrics Apex class</a>
-      <div class="pr-meta">
-        <span>&#128100; <strong>Author:</strong> Akshay-0502</span>
-        <span>&#10145; <strong>Branch:</strong> feature/testDevOpsDashboard → uat</span>
-        <span>&#128196; <strong>Files:</strong> 4</span>
-        <span style="color:#1A7A4A">&#43;63 additions</span>
-        <span style="color:#B91C1C">&#8722;0 deletions</span>
-      </div>
-      <div style="margin-top:8px;font-size:12px;color:#555;">
-        <strong>Files:</strong> DevOpsDashboardService.cls, DevOpsDashboardService.cls-meta.xml, DevOpsDashboardServiceTest.cls, DevOpsDashboardServiceTest.cls-meta.xml
-      </div>
-      <div style="margin-top:6px;"><span class="badge badge-amber">Awaiting Review</span></div>
-    </div>
-  </div>
-
-  <!-- Merged PRs -->
-  <div class="section">
-    <h2>&#10003; Pull Requests — Merged Last 24h to UAT/main</h2>
-    <p style="color:#666;font-size:13px;padding:10px;background:#F2F5FA;border-radius:6px;">No PRs merged to UAT or main in the last 24 hours.</p>
-  </div>
-
-  <!-- Repository Overview -->
-  <div class="section">
-    <h2>&#128196; Repository Overview — Akshay-0502/Salesforce</h2>
-    <table>
-      <thead><tr><th>Branch</th><th>Type</th><th>Status</th></tr></thead>
-      <tbody>
-        <tr><td><strong>main</strong></td><td>Production</td><td><span class="badge badge-green">Active</span></td></tr>
-        <tr><td><strong>uat</strong></td><td>Staging / UAT</td><td><span class="badge badge-blue">Active</span></td></tr>
-        <tr><td><strong>feature/testDevOpsDashboard</strong></td><td>Feature Branch</td><td><span class="badge badge-amber">Open PR</span></td></tr>
-      </tbody>
-    </table>
-    <div style="margin-top:12px;font-size:13px;color:#555;">
-      &#127760; GitHub Pages: <a href="https://akshay-0502.github.io/Salesforce/" target="_blank" style="color:#1058B0;">https://akshay-0502.github.io/Salesforce/</a>
-    </div>
-  </div>
-
+<!-- KPI Strip -->
+<div class="kpi-strip">
+  <div class="kpi-tile"><div class="val">10</div><div class="lbl">Active Users</div></div>
+  <div class="kpi-tile"><div class="val">32</div><div class="lbl">Apex Classes</div></div>
+  <div class="kpi-tile"><div class="val">20</div><div class="lbl">Active Flows</div></div>
+  <div class="kpi-tile"><div class="val">7</div><div class="lbl">Scheduled Jobs</div></div>
+  <div class="kpi-tile"><div class="val" style="color:#1A7A4A">0.0%</div><div class="lbl">API Usage</div></div>
+  <div class="kpi-tile"><div class="val" style="color:#B45309">1</div><div class="lbl">Open PRs</div></div>
 </div>
-<footer>
-  Generated: 25 Sep 2026, 09:28 IST &nbsp;|&nbsp; Org: trailsignup-b168ab0f0d1b03.my.salesforce.com &nbsp;|&nbsp; Repo: Akshay-0502/Salesforce &nbsp;|&nbsp;
-  <a href="https://akshay-0502.github.io/Salesforce/" style="color:#1058B0;">https://akshay-0502.github.io/Salesforce/</a>
-</footer>
+
+<!-- Health Score -->
+<div class="section-title">Org Health Score</div>
+<div class="card health-row">
+  <div class="donut-wrap">
+    <svg width="160" height="160" viewBox="0 0 160 160">
+      <circle cx="80" cy="80" r="60" fill="none" stroke="#e2e8f0" stroke-width="18"/>
+      <circle cx="80" cy="80" r="60" fill="none" stroke="#B45309" stroke-width="18"
+        stroke-dasharray="235.6 141.4"
+        stroke-dashoffset="94.25" stroke-linecap="round"/>
+      <text x="80" y="75" text-anchor="middle" font-size="32" font-weight="800" fill="#B45309">62</text>
+      <text x="80" y="95" text-anchor="middle" font-size="12" fill="#666">/100</text>
+    </svg>
+    <div style="color:#B45309;font-size:16px;font-weight:700;margin-top:4px;">Fair</div>
+  </div>
+  <div>
+    <div style="font-size:13px;font-weight:600;color:#0B3D7A;margin-bottom:10px;">Score Factors</div>
+    <div class="factors-grid">
+      <div class="factor green"><span>API Usage &lt; 10%</span><span class="badge">+20</span></div>
+      <div class="factor green"><span>Data Storage &lt; 50%</span><span class="badge">+15</span></div>
+      <div class="factor green"><span>Active Flows &gt; 0</span><span class="badge">+15</span></div>
+      <div class="factor green"><span>All Scheduled Jobs WAITING</span><span class="badge">+10</span></div>
+      <div class="factor green"><span>Active Apex Classes &gt; 0</span><span class="badge">+10</span></div>
+      <div class="factor green"><span>No Apex Triggers</span><span class="badge">+2</span></div>
+      <div class="factor red"><span>1 Aborted Async Job</span><span class="badge">-8</span></div>
+      <div class="factor amber"><span>90% Users Never Logged In</span><span class="badge">-8</span></div>
+      <div class="factor red"><span>No Apex Test Results</span><span class="badge">-12</span></div>
+      <div class="factor green"><span>Open PRs ≤ 5</span><span class="badge">+0</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Org Limits -->
+<div class="section-title">Org Limits</div>
+<div class="card">
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-label"><span>Daily API Requests</span><span>2 / 441,450 (0.00%)</span></div>
+    <div class="progress-bar"><div class="progress-bar-fill" style="width:0.001%;background:#1A7A4A;"></div></div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-label"><span>Data Storage (MB)</span><span>0 / 52,537 MB (0.00%)</span></div>
+    <div class="progress-bar"><div class="progress-bar-fill" style="width:0.001%;background:#1A7A4A;"></div></div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-label"><span>File Storage (MB)</span><span>2 / 134,712 MB (0.001%)</span></div>
+    <div class="progress-bar"><div class="progress-bar-fill" style="width:0.001%;background:#1A7A4A;"></div></div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-label"><span>Daily Bulk API Batches</span><span>0 / 15,000 (0%)</span></div>
+    <div class="progress-bar"><div class="progress-bar-fill" style="width:0%;background:#1A7A4A;"></div></div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-label"><span>Mass Email</span><span>0 / 10 (0%)</span></div>
+    <div class="progress-bar"><div class="progress-bar-fill" style="width:0%;background:#1A7A4A;"></div></div>
+  </div>
+</div>
+
+<!-- User Activity -->
+<div class="section-title">User Activity</div>
+<div class="card table-wrap">
+<table>
+<thead><tr><th>Name</th><th>Type</th><th>Status</th><th>Last Login</th></tr></thead>
+<tbody>
+<tr><td>Akshay Kumar</td><td>Standard</td><td><span class="badge-pill badge-active">Active</span></td><td>2026-09-25</td></tr>
+<tr><td>B2BMA Integration</td><td>Standard</td><td><span class="badge-pill badge-active">Active</span></td><td><span style="color:#999">Never</span></td></tr>
+<tr><td>SalesforceIQ Integration</td><td>Standard</td><td><span class="badge-pill badge-active">Active</span></td><td><span style="color:#999">Never</span></td></tr>
+<tr><td>Insights Integration</td><td>Standard</td><td><span class="badge-pill badge-active">Active</span></td><td><span style="color:#999">Never</span></td></tr>
+<tr><td>Integration User</td><td>Standard</td><td><span class="badge-pill badge-active">Active</span></td><td><span style="color:#999">Never</span></td></tr>
+<tr><td>Data.com Clean</td><td>AutomatedProcess</td><td><span class="badge-pill badge-active">Active</span></td><td><span style="color:#999">Never</span></td></tr>
+<tr><td>Automated Process</td><td>AutomatedProcess</td><td><span class="badge-pill badge-active">Active</span></td><td><span style="color:#999">Never</span></td></tr>
+<tr><td>Commerce</td><td>AutomatedProcess</td><td><span class="badge-pill badge-active">Active</span></td><td><span style="color:#999">Never</span></td></tr>
+<tr><td>Chatter Expert</td><td>CsnOnly</td><td><span class="badge-pill badge-active">Active</span></td><td><span style="color:#999">Never</span></td></tr>
+<tr><td>Platform Integration User</td><td>CloudIntegrationUser</td><td><span class="badge-pill badge-active">Active</span></td><td><span style="color:#999">Never</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- Active Flows -->
+<div class="section-title">Active Flows (20 total)</div>
+<div class="two-col">
+<div class="card">
+  <div style="font-size:13px;font-weight:600;margin-bottom:12px;">By Process Type</div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-label"><span style="color:#7c3aed;font-weight:600;">Flow</span><span>1 (5%)</span></div>
+    <div class="progress-bar"><div class="progress-bar-fill" style="width:5%;background:#7c3aed;"></div></div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-label"><span style="color:#0369a1;font-weight:600;">AutoLaunchedFlow</span><span>19 (95%)</span></div>
+    <div class="progress-bar"><div class="progress-bar-fill" style="width:95%;background:#0369a1;"></div></div>
+  </div>
+</div>
+<div class="card table-wrap">
+<table><thead><tr><th>Flow Label</th><th>Type</th></tr></thead><tbody>
+<tr><td>Field Service: Manage Work Orders</td><td><span class="badge-pill badge-flow">Flow</span></td></tr>
+<tr><td>Field Service: Update Appointment Arrival Window</td><td><span class="badge-pill badge-auto">AutoLaunchedFlow</span></td></tr>
+<tr><td>Field Service: Cancel Service Appointment</td><td><span class="badge-pill badge-auto">AutoLaunchedFlow</span></td></tr>
+<tr><td>Field Service: Format Service Appointment Time</td><td><span class="badge-pill badge-auto">AutoLaunchedFlow</span></td></tr>
+<tr><td>Field Service: Create Contact</td><td><span class="badge-pill badge-auto">AutoLaunchedFlow</span></td></tr>
+<tr><td>Field Service: Delete Temporary Service Appt</td><td><span class="badge-pill badge-auto">AutoLaunchedFlow</span></td></tr>
+<tr><td>Field Service: Check Eligibility for Scheduling</td><td><span class="badge-pill badge-auto">AutoLaunchedFlow</span></td></tr>
+<tr><td>Field Service: Get Current Time</td><td><span class="badge-pill badge-auto">AutoLaunchedFlow</span></td></tr>
+<tr><td>Field Service: Get Service Appointment Identifier</td><td><span class="badge-pill badge-auto">AutoLaunchedFlow</span></td></tr>
+<tr><td>Field Service: Get Verified Contact ID</td><td><span class="badge-pill badge-auto">AutoLaunchedFlow</span></td></tr>
+</tbody></table>
+<div style="font-size:11px;color:#999;padding:8px 10px;">Showing 10 of 20 active flows</div>
+</div>
+</div>
+
+<!-- Scheduled Jobs -->
+<div class="section-title">Scheduled Jobs (7)</div>
+<div class="card table-wrap">
+<table><thead><tr><th>Job Name</th><th>State</th><th>Next Fire Time</th></tr></thead><tbody>
+<tr><td>ObligationCronJob</td><td><span class="badge-pill badge-waiting">WAITING</span></td><td>2026-09-25 15:00 UTC</td></tr>
+<tr><td>SRT Semantic Graph Edge Update Job</td><td><span class="badge-pill badge-waiting">WAITING</span></td><td>2026-10-20 20:56 UTC</td></tr>
+<tr><td>ReportType Edge Data Loader Job</td><td><span class="badge-pill badge-waiting">WAITING</span></td><td>2026-09-29 19:18 UTC</td></tr>
+<tr><td>Program Milestone Computation Cron Job</td><td><span class="badge-pill badge-waiting">WAITING</span></td><td>2026-09-25 07:59 UTC</td></tr>
+<tr><td>Program Status Update Cron Job</td><td><span class="badge-pill badge-waiting">WAITING</span></td><td>2026-09-25 11:00 UTC</td></tr>
+<tr><td>Retention Usage</td><td><span class="badge-pill badge-waiting">WAITING</span></td><td>2026-09-25 15:00 UTC</td></tr>
+<tr><td>Privacy Center Audit</td><td><span class="badge-pill badge-waiting">WAITING</span></td><td>2026-09-25 05:00 UTC</td></tr>
+</tbody></table>
+</div>
+
+<!-- Async Jobs & Test Results -->
+<div class="section-title">Async Jobs &amp; Test Results</div>
+<div class="two-col">
+<div class="card table-wrap">
+  <div style="font-weight:600;font-size:13px;margin-bottom:8px;">Recent Async Jobs</div>
+  <table><thead><tr><th>Type</th><th>Status</th><th>Errors</th><th>Created</th></tr></thead><tbody>
+  <tr><td>Future</td><td><span class="badge-pill badge-completed">Completed</span></td><td>0</td><td>2026-09-20</td></tr>
+  <tr><td>ScheduledApex</td><td><span class="badge-pill badge-aborted">Aborted</span></td><td>0</td><td>2026-09-20</td></tr>
+  </tbody></table>
+</div>
+<div class="card">
+  <div style="font-weight:600;font-size:13px;margin-bottom:8px;">Apex Test Results</div>
+  <div class="no-data">⚠️ No test results found. Run Apex tests to validate org health and improve the health score.</div>
+</div>
+</div>
+
+<!-- Open PRs -->
+<div class="section-title">Pull Requests — Open (1)</div>
+<div class="card table-wrap">
+<table><thead><tr><th>PR</th><th>Branch</th><th>Author</th><th>Files Changed</th><th>Created</th></tr></thead><tbody>
+<tr>
+  <td><a href="https://github.com/Akshay-0502/Salesforce/pull/1" target="_blank" style="color:#1058B0;font-weight:600;">#1: feat: DevOpsDashboardService — org health metrics Apex class</a></td>
+  <td><code style="font-size:11px;">feature/testDevOpsDashboard → uat</code></td>
+  <td>Akshay-0502</td>
+  <td>
+    <span style="display:inline-block;background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:11px;margin:1px;">DevOpsDashboardService.cls</span>
+    <span style="display:inline-block;background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:11px;margin:1px;">DevOpsDashboardService.cls-meta.xml</span>
+    <span style="display:inline-block;background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:11px;margin:1px;">DevOpsDashboardServiceTest.cls</span>
+    <span style="display:inline-block;background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:11px;margin:1px;">DevOpsDashboardServiceTest.cls-meta.xml</span>
+  </td>
+  <td>2026-09-24</td>
+</tr>
+</tbody></table>
+</div>
+
+<!-- Merged PRs -->
+<div class="section-title">Pull Requests — Merged Last 24h to UAT/main</div>
+<div class="card"><div class="no-data">No PRs merged to UAT or main in the last 24 hours.</div></div>
+
+<!-- Repository Overview -->
+<div class="section-title">Repository Overview</div>
+<div class="two-col">
+<div class="card">
+  <div style="font-weight:600;margin-bottom:12px;">Branches (3)</div>
+  <table><thead><tr><th>Branch Name</th></tr></thead><tbody>
+  <tr><td>🌿 main</td></tr>
+  <tr><td>🔀 uat</td></tr>
+  <tr><td>🔀 feature/testDevOpsDashboard</td></tr>
+  </tbody></table>
+</div>
+<div class="card">
+  <div style="font-weight:600;margin-bottom:12px;">Repository Stats</div>
+  <table>
+    <tr><td style="color:#666;">Repo</td><td><a href="https://github.com/Akshay-0502/Salesforce" target="_blank" style="color:#1058B0;">Akshay-0502/Salesforce</a></td></tr>
+    <tr><td style="color:#666;">Stars</td><td>0</td></tr>
+    <tr><td style="color:#666;">Forks</td><td>0</td></tr>
+    <tr><td style="color:#666;">Open Issues</td><td>1</td></tr>
+    <tr><td style="color:#666;">Default Branch</td><td>main</td></tr>
+    <tr><td style="color:#666;">Repo Size</td><td>48 KB</td></tr>
+    <tr><td style="color:#666;">Last Updated</td><td>2026-09-25</td></tr>
+    <tr><td style="color:#666;">GitHub Pages</td><td><a href="https://akshay-0502.github.io/Salesforce/" target="_blank" style="color:#1058B0;">View Live Dashboard ↗</a></td></tr>
+  </table>
+</div>
+</div>
+
+<div class="footer">
+  <p>Generated at <strong>25 Sep 2026, 10:13 AM IST</strong> &nbsp;|&nbsp; Org: <strong>trailsignup-b168ab0f0d1b03.my.salesforce.com</strong> &nbsp;|&nbsp; Repo: <strong>Akshay-0502/Salesforce</strong></p>
+  <p style="margin-top:6px;"><a href="https://akshay-0502.github.io/Salesforce/" target="_blank">GitHub Pages: https://akshay-0502.github.io/Salesforce/</a></p>
+</div>
+</div>
 </body>
 </html>
