@@ -1,12 +1,12 @@
-# Siemens Salesforce DevOps
+# Salesforce DevOps
 
-Salesforce DX project for Siemens using Copado CI/CD pipeline.
+Salesforce DX project template.
 
 ## Environments
 | Branch | Environment |
 |--------|------------|
 | `main` | Production |
-| `uat`  | SieSalesUAT |
+| `uat`  | UAT |
 | `feature/*` | Developer Sandbox |
 
 ## Structure
