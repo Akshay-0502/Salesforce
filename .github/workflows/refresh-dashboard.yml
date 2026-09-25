@@ -3,10 +3,7 @@ name: Refresh DevOps Dashboard
 on:
   schedule:
     - cron: '0 * * * *'   # every hour
-  workflow_dispatch:        # manual trigger from GitHub UI
-
-permissions:
-  contents: write
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,8 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -24,10 +20,19 @@ jobs:
 
       - name: Build dashboard
         env:
+          # Org 1 (required)
           SF_INSTANCE_URL:  ${{ secrets.SF_INSTANCE_URL }}
           SF_CLIENT_ID:     ${{ secrets.SF_CLIENT_ID }}
           SF_CLIENT_SECRET: ${{ secrets.SF_CLIENT_SECRET }}
+          SF_ORG1_LABEL:    ${{ secrets.SF_ORG1_LABEL }}   # optional display name, e.g. "Trailsignup"
+          # Org 2 (optional — add secrets to enable second tab)
+          SF2_INSTANCE_URL: ${{ secrets.SF2_INSTANCE_URL }}
+          SF2_CLIENT_ID:    ${{ secrets.SF2_CLIENT_ID }}
+          SF2_CLIENT_SECRET: ${{ secrets.SF2_CLIENT_SECRET }}
+          SF_ORG2_LABEL:    ${{ secrets.SF_ORG2_LABEL }}   # optional display name, e.g. "Production"
+          # GitHub + Slack
           GH_TOKEN:         ${{ secrets.GH_PAT }}
+          SLACK_WEBHOOK:    ${{ secrets.SLACK_WEBHOOK }}
         run: python scripts/build_dashboard.py
 
       - name: Commit and push updated dashboard
