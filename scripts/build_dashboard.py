@@ -511,3 +511,4 @@ with open("docs/index.html", "w") as f:
 print(f"Dashboard built for {len(org_data)} org(s).")
 for d in org_data:
     print(f"  {d['label']}: {d['score']}/100 ({d['hlabel']})")
+# multi-org build — Fri Sep 25 14:16:53 UTC 2026
