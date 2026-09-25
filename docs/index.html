@@ -2,246 +2,186 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Siemens Salesforce DevOps Dashboard</title>
 <style>
-:root { color-scheme: light; }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: "Segoe UI", Arial, sans-serif; background: #F2F5FA; color: #2C3E50; font-size: 14px; }
-.topbar { position: sticky; top: 0; z-index: 100; background: #0B3D7A; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 54px; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
-.topbar-title { font-size: 18px; font-weight: 700; letter-spacing: 0.02em; }
-.topbar-sub { font-size: 12px; opacity: 0.75; }
-.topbar-right { text-align: right; }
-.main { max-width: 1280px; margin: 0 auto; padding: 20px 16px 40px; }
-.section { background: #fff; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 20px; overflow: hidden; }
-.section-header { background: #EEF3FB; padding: 12px 20px; font-size: 13px; font-weight: 700; color: #0B3D7A; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid #dce8f5; }
-.section-body { padding: 16px 20px; }
-.kpi-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 20px; }
-.kpi-tile { background: #fff; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); padding: 16px; text-align: center; }
-.kpi-val { font-size: 28px; font-weight: 700; color: #0B3D7A; }
-.kpi-label { font-size: 11px; color: #6B7280; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
-.health-wrap { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
-.donut-wrap { position: relative; width: 140px; height: 140px; flex-shrink: 0; }
-.donut-wrap svg { transform: rotate(-90deg); }
-.donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
-.donut-score { font-size: 30px; font-weight: 800; color: #0B3D7A; }
-.donut-grade { font-size: 11px; font-weight: 700; color: #B91C1C; }
-.factors-wrap { flex: 1; min-width: 220px; }
-.factor-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #F2F5FA; font-size: 13px; }
-.factor-label { color: #2C3E50; }
-.factor-val { font-weight: 700; min-width: 40px; text-align: right; }
-.limit-item { margin-bottom: 12px; }
-.limit-header { display: flex; justify-content: space-between; font-size: 12px; color: #6B7280; margin-bottom: 4px; }
-.progress-bar { background: #E5EAF2; border-radius: 4px; height: 10px; overflow: hidden; }
-.progress-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { background: #F2F5FA; color: #0B3D7A; text-align: left; padding: 8px 10px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #dce8f5; }
-td { padding: 8px 10px; border-bottom: 1px solid #F2F5FA; vertical-align: middle; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: #EEF3FB; }
-.badge-green { background: #D1FAE5; color: #1A7A4A; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
-.badge-red { background: #FEE2E2; color: #B91C1C; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
-.tag { background: #EEF3FB; color: #1058B0; border-radius: 4px; padding: 2px 7px; font-size: 11px; font-weight: 600; }
-code { background: #F2F5FA; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.flow-bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
-.flow-bar-label { width: 200px; font-size: 12px; color: #2C3E50; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.flow-bar-track { flex: 1; height: 14px; background: #E5EAF2; border-radius: 4px; overflow: hidden; }
-.flow-bar-fill { height: 100%; border-radius: 4px; }
-.flow-bar-count { width: 36px; text-align: right; font-size: 12px; font-weight: 700; color: #0B3D7A; }
-.footer { text-align: center; color: #9CA3AF; font-size: 12px; padding: 16px; }
-.footer a { color: #1058B0; text-decoration: none; }
-@media (max-width: 900px) {
-  .kpi-strip { grid-template-columns: repeat(3, 1fr); }
-  .two-col { grid-template-columns: 1fr; }
-}
-@media (max-width: 600px) {
-  .kpi-strip { grid-template-columns: repeat(2, 1fr); }
-}
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", Arial, sans-serif; background: #F2F5FA; color: #2C3E50; font-size: 14px; }
+  .topbar { position: sticky; top: 0; z-index: 100; background: #0B3D7A; color: #fff; padding: 12px 24px;
+             display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+  .topbar h1 { font-size: 18px; font-weight: 600; letter-spacing: .3px; }
+  .topbar .refresh { font-size: 12px; opacity: .8; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
+  .section { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 20px;
+              box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .section-title { font-size: 15px; font-weight: 600; color: #0B3D7A; margin-bottom: 14px;
+                    border-bottom: 2px solid #EEF3FB; padding-bottom: 8px; }
+  .kpi-strip { display: grid; grid-template-columns: repeat(6,1fr); gap: 12px; margin-bottom: 20px; }
+  .kpi { background: #fff; border-radius: 10px; padding: 16px; text-align: center;
+          box-shadow: 0 1px 4px rgba(0,0,0,.08); border-top: 3px solid #1058B0; }
+  .kpi .val { font-size: 28px; font-weight: 700; color: #0B3D7A; }
+  .kpi .lbl { font-size: 11px; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: .4px; }
+  .health-wrap { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+  .donut-wrap { text-align: center; min-width: 160px; }
+  .donut-label { font-size: 32px; font-weight: 700; }
+  .donut-grade { font-size: 16px; font-weight: 600; margin-top: 4px; }
+  .factors-table { flex: 1; min-width: 280px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #EEF3FB; color: #0B3D7A; font-weight: 600; padding: 8px 10px; text-align: left; font-size: 12px; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #F8FAFD; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .badge-green { background: #D1FAE5; color: #1A7A4A; }
+  .badge-red { background: #FEE2E2; color: #B91C1C; }
+  .badge-amber { background: #FEF3C7; color: #B45309; }
+  .badge-blue { background: #DBEAFE; color: #1058B0; }
+  .progress-bar { height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; margin-top: 4px; }
+  .progress-fill { height: 100%; border-radius: 4px; transition: width .3s; }
+  .limit-row { margin-bottom: 12px; }
+  .limit-label { display: flex; justify-content: space-between; font-size: 12px; color: #555; margin-bottom: 2px; }
+  .footer { text-align: center; font-size: 11px; color: #888; padding: 16px; margin-top: 4px; }
+  a { color: #1058B0; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  @media(max-width:768px) { .kpi-strip { grid-template-columns: repeat(3,1fr); } }
 </style>
 </head>
 <body>
 <div class="topbar">
-  <div>
-    <div class="topbar-title">⚡ Siemens Salesforce DevOps</div>
-    <div class="topbar-sub">Live Metrics Dashboard</div>
-  </div>
-  <div class="topbar-right">
-    <div style="font-size:13px;font-weight:600">Last refreshed</div>
-    <div class="topbar-sub">25 Sep 2026, 07:10 AM IST</div>
-  </div>
+  <h1>&#x1F4CA; Siemens Salesforce DevOps Dashboard</h1>
+  <span class="refresh">&#x1F504; Last refreshed: 25 Sep 2026, 07:15 IST</span>
 </div>
-<div class="main">
+<div class="container">
 
-<!-- KPI Strip -->
-<div class="kpi-strip">
-  <div class="kpi-tile"><div class="kpi-val">10</div><div class="kpi-label">Active Users</div></div>
-  <div class="kpi-tile"><div class="kpi-val">32</div><div class="kpi-label">Apex Classes</div></div>
-  <div class="kpi-tile"><div class="kpi-val">311</div><div class="kpi-label">Active Flows</div></div>
-  <div class="kpi-tile"><div class="kpi-val">7</div><div class="kpi-label">Scheduled Jobs</div></div>
-  <div class="kpi-tile"><div class="kpi-val">0.0%</div><div class="kpi-label">API Usage</div></div>
-  <div class="kpi-tile"><div class="kpi-val">1</div><div class="kpi-label">Open PRs</div></div>
-</div>
+  <!-- KPI Strip -->
+  <div class="kpi-strip">
+    <div class="kpi"><div class="val">10</div><div class="lbl">Active Users</div></div>
+    <div class="kpi"><div class="val">32</div><div class="lbl">Apex Classes</div></div>
+    <div class="kpi"><div class="val">311</div><div class="lbl">Active Flows</div></div>
+    <div class="kpi"><div class="val">7</div><div class="lbl">Scheduled Jobs</div></div>
+    <div class="kpi"><div class="val">0.0%</div><div class="lbl">API Usage</div></div>
+    <div class="kpi"><div class="val">1</div><div class="lbl">Open PRs</div></div>
+  </div>
 
-<!-- Health Score -->
-<div class="section">
-  <div class="section-header">Org Health Score</div>
-  <div class="section-body">
+  <!-- Health Score -->
+  <div class="section">
+    <div class="section-title">Org Health Score</div>
     <div class="health-wrap">
       <div class="donut-wrap">
-        <svg width="140" height="140" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="40" fill="none" stroke="#E5EAF2" stroke-width="12"/>
-          <circle cx="50" cy="50" r="40" fill="none" stroke="#B91C1C" stroke-width="12"
-            stroke-dasharray="251.327" stroke-dashoffset="-11" stroke-linecap="round"/>
+        <svg width="140" height="140" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="54" fill="none" stroke="#e5e7eb" stroke-width="12"/>
+          <circle cx="60" cy="60" r="54" fill="none" stroke="#B91C1C" stroke-width="12"
+            stroke-dasharray="176.4 162.9" stroke-dashoffset="84.8"
+            stroke-linecap="round"/>
+          <text x="60" y="56" text-anchor="middle" font-size="22" font-weight="700" fill="#B91C1C">52</text>
+          <text x="60" y="72" text-anchor="middle" font-size="10" fill="#666">Needs Attention</text>
         </svg>
-        <div class="donut-center">
-          <div class="donut-score">44</div>
-          <div class="donut-grade">Needs Attention</div>
-        </div>
+        <div class="donut-label" style="color:#B91C1C">52/100</div>
+        <div class="donut-grade" style="color:#B91C1C">Needs Attention</div>
       </div>
-      <div class="factors-wrap">
-        <div style="font-size:12px;font-weight:700;color:#6B7280;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">Score Factors</div>
-        <div class="factor-row"><span class="factor-label">API Usage <10%</span><span class="factor-val" style="color:#1A7A4A">+20</span></div>
-<div class="factor-row"><span class="factor-label">Data Storage <50%</span><span class="factor-val" style="color:#1A7A4A">+15</span></div>
-<div class="factor-row"><span class="factor-label">Active Flows (311)</span><span class="factor-val" style="color:#1A7A4A">+15</span></div>
-<div class="factor-row"><span class="factor-label">All Scheduled Jobs WAITING</span><span class="factor-val" style="color:#1A7A4A">+10</span></div>
-<div class="factor-row"><span class="factor-label">Active Apex Classes (32)</span><span class="factor-val" style="color:#1A7A4A">+10</span></div>
-<div class="factor-row"><span class="factor-label">No Triggers</span><span class="factor-val" style="color:#1A7A4A">+2</span></div>
-<div class="factor-row"><span class="factor-label">1 Aborted Async Job(s)</span><span class="factor-val" style="color:#B91C1C">-8</span></div>
-<div class="factor-row"><span class="factor-label">>80% Users Never Logged In</span><span class="factor-val" style="color:#B91C1C">-8</span></div>
-<div class="factor-row"><span class="factor-label">No Apex Test Results</span><span class="factor-val" style="color:#B91C1C">-12</span></div>
-
+      <div class="factors-table">
+        <table>
+          <tr><th>Factor</th><th>Impact</th></tr>
+          <tr><td>API Limit < 10% used</td><td style="color:#1A7A4A;font-weight:600">+20</td></tr><tr><td>Data Storage < 50% used</td><td style="color:#1A7A4A;font-weight:600">+15</td></tr><tr><td>Active Flows (311)</td><td style="color:#1A7A4A;font-weight:600">+15</td></tr><tr><td>All Scheduled Jobs WAITING</td><td style="color:#1A7A4A;font-weight:600">+10</td></tr><tr><td>Active Apex Classes (32)</td><td style="color:#1A7A4A;font-weight:600">+10</td></tr><tr><td>No Apex Triggers</td><td style="color:#1A7A4A;font-weight:600">+2</td></tr><tr><td>Aborted Async Jobs (1)</td><td style="color:#B91C1C;font-weight:600">-8</td></tr><tr><td>No Apex Test Results</td><td style="color:#B91C1C;font-weight:600">-12</td></tr>
+        </table>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Org Limits -->
-<div class="section">
-  <div class="section-header">Org Limits</div>
-  <div class="section-body"><div class="limit-item">
-      <div class="limit-header"><span>Daily API Requests</span><span>1 / 441,450 (0.0%)</span></div>
-      <div class="progress-bar"><div class="progress-fill" style="width:0.0%;background:#1A7A4A"></div></div>
-    </div><div class="limit-item">
-      <div class="limit-header"><span>Data Storage (MB)</span><span>0 / 52,537 (0.0%)</span></div>
-      <div class="progress-bar"><div class="progress-fill" style="width:0.0%;background:#1A7A4A"></div></div>
-    </div><div class="limit-item">
-      <div class="limit-header"><span>File Storage (MB)</span><span>2 / 134,712 (0.0%)</span></div>
-      <div class="progress-bar"><div class="progress-fill" style="width:0.0%;background:#1A7A4A"></div></div>
-    </div></div>
-</div>
+  <!-- Org Limits -->
+  <div class="section">
+    <div class="section-title">Org Limits</div>
+    <div class="limit-row">
+      <div class="limit-label"><span>Daily API Requests</span><span>4 / 441,450 (0.0%)</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0.0%;background:#1058B0"></div></div>
+    </div>
+    <div class="limit-row">
+      <div class="limit-label"><span>Data Storage (MB)</span><span>0 / 52,537 (0.0%)</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0.2%;background:#1A7A4A"></div></div>
+    </div>
+    <div class="limit-row">
+      <div class="limit-label"><span>File Storage (MB)</span><span>2 / 134,712 (0.0%)</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0.2%;background:#1A7A4A"></div></div>
+    </div>
+  </div>
 
-<!-- User Activity -->
-<div class="section">
-  <div class="section-header">User Activity (Recent 20)</div>
-  <div class="section-body" style="overflow-x:auto">
+  <!-- User Activity -->
+  <div class="section">
+    <div class="section-title">User Activity (Top 10)</div>
     <table>
-      <tr><th>Name</th><th>Type</th><th>Status</th><th>Last Login</th><th>Created</th></tr>
-      <tr><td>B2BMA Integration</td><td>Standard</td><td><span class="badge-green">Active</span></td><td><span style="color:#B91C1C">Never</span></td><td>2026-08-19</td></tr><tr><td>SalesforceIQ Integration</td><td>Standard</td><td><span class="badge-green">Active</span></td><td><span style="color:#B91C1C">Never</span></td><td>2026-08-19</td></tr><tr><td>Insights Integration</td><td>Standard</td><td><span class="badge-green">Active</span></td><td><span style="color:#B91C1C">Never</span></td><td>2026-08-19</td></tr><tr><td>Data.com Clean</td><td>AutomatedProcess</td><td><span class="badge-green">Active</span></td><td><span style="color:#B91C1C">Never</span></td><td>2026-08-19</td></tr><tr><td>Integration User</td><td>Standard</td><td><span class="badge-green">Active</span></td><td><span style="color:#B91C1C">Never</span></td><td>2026-08-19</td></tr><tr><td>Automated Process</td><td>AutomatedProcess</td><td><span class="badge-green">Active</span></td><td><span style="color:#B91C1C">Never</span></td><td>2026-08-19</td></tr><tr><td>Akshay Kumar</td><td>Standard</td><td><span class="badge-green">Active</span></td><td>2026-09-24</td><td>2026-08-19</td></tr><tr><td>Commerce</td><td>AutomatedProcess</td><td><span class="badge-green">Active</span></td><td><span style="color:#B91C1C">Never</span></td><td>2026-08-19</td></tr><tr><td>Chatter Expert</td><td>CsnOnly</td><td><span class="badge-green">Active</span></td><td><span style="color:#B91C1C">Never</span></td><td>2026-08-19</td></tr><tr><td>Platform Integration User</td><td>CloudIntegrationUser</td><td><span class="badge-green">Active</span></td><td><span style="color:#B91C1C">Never</span></td><td>2026-08-19</td></tr>
+      <tr><th>Name</th><th>Type</th><th>Status</th><th>Created</th><th>Last Login</th></tr>
+      <tr><td>B2BMA Integration</td><td>Standard</td><td><span class="badge badge-green">Active</span></td><td>2026-08-19</td><td><span style="color:#B91C1C">Never</span></td></tr><tr><td>SalesforceIQ Integration</td><td>Standard</td><td><span class="badge badge-green">Active</span></td><td>2026-08-19</td><td><span style="color:#B91C1C">Never</span></td></tr><tr><td>Insights Integration</td><td>Standard</td><td><span class="badge badge-green">Active</span></td><td>2026-08-19</td><td><span style="color:#B91C1C">Never</span></td></tr><tr><td>Data.com Clean</td><td>AutomatedProcess</td><td><span class="badge badge-green">Active</span></td><td>2026-08-19</td><td><span style="color:#B91C1C">Never</span></td></tr><tr><td>Integration User</td><td>Standard</td><td><span class="badge badge-green">Active</span></td><td>2026-08-19</td><td><span style="color:#B91C1C">Never</span></td></tr><tr><td>Automated Process</td><td>AutomatedProcess</td><td><span class="badge badge-green">Active</span></td><td>2026-08-19</td><td><span style="color:#B91C1C">Never</span></td></tr><tr><td>Akshay Kumar</td><td>Standard</td><td><span class="badge badge-green">Active</span></td><td>2026-08-19</td><td>2026-09-25</td></tr><tr><td>Commerce</td><td>AutomatedProcess</td><td><span class="badge badge-green">Active</span></td><td>2026-08-19</td><td><span style="color:#B91C1C">Never</span></td></tr><tr><td>Chatter Expert</td><td>CsnOnly</td><td><span class="badge badge-green">Active</span></td><td>2026-08-19</td><td><span style="color:#B91C1C">Never</span></td></tr><tr><td>Platform Integration User</td><td>CloudIntegrationUser</td><td><span class="badge badge-green">Active</span></td><td>2026-08-19</td><td><span style="color:#B91C1C">Never</span></td></tr>
     </table>
   </div>
-</div>
 
-<!-- Active Flows -->
-<div class="section">
-  <div class="section-header">Active Flows (311 total)</div>
-  <div class="section-body">
-    <div style="margin-bottom:20px">
-      <div style="font-size:12px;font-weight:700;color:#6B7280;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em">By Process Type</div>
-      <div class="flow-bar-row"><span class="flow-bar-label">AutoLaunchedFlow</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:100%;background:#1058B0"></div></div><span class="flow-bar-count">159</span></div><div class="flow-bar-row"><span class="flow-bar-label">Flow</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:61%;background:#1A7A4A"></div></div><span class="flow-bar-count">97</span></div><div class="flow-bar-row"><span class="flow-bar-label">Appointments</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:10%;background:#B45309"></div></div><span class="flow-bar-count">16</span></div><div class="flow-bar-row"><span class="flow-bar-label">CheckoutFlow</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:9%;background:#6366F1"></div></div><span class="flow-bar-count">15</span></div><div class="flow-bar-row"><span class="flow-bar-label">FSCLending</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:4%;background:#0B3D7A"></div></div><span class="flow-bar-count">6</span></div><div class="flow-bar-row"><span class="flow-bar-label">ApprovalWorkflow</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:3%;background:#10B981"></div></div><span class="flow-bar-count">4</span></div><div class="flow-bar-row"><span class="flow-bar-label">RoutingFlow</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:3%;background:#1058B0"></div></div><span class="flow-bar-count">4</span></div><div class="flow-bar-row"><span class="flow-bar-label">Orchestrator</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:2%;background:#1A7A4A"></div></div><span class="flow-bar-count">3</span></div><div class="flow-bar-row"><span class="flow-bar-label">EvaluationFlow</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:1%;background:#B45309"></div></div><span class="flow-bar-count">2</span></div><div class="flow-bar-row"><span class="flow-bar-label">ManagedContentAuthoringWorkflow</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:1%;background:#6366F1"></div></div><span class="flow-bar-count">1</span></div><div class="flow-bar-row"><span class="flow-bar-label">Survey</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:1%;background:#0B3D7A"></div></div><span class="flow-bar-count">1</span></div><div class="flow-bar-row"><span class="flow-bar-label">IndividualObjectLinkingFlow</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:1%;background:#10B981"></div></div><span class="flow-bar-count">1</span></div><div class="flow-bar-row"><span class="flow-bar-label">RecommendationStrategy</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:1%;background:#1058B0"></div></div><span class="flow-bar-count">1</span></div><div class="flow-bar-row"><span class="flow-bar-label">FieldServiceMobile</span><div class="flow-bar-track"><div class="flow-bar-fill" style="width:1%;background:#1A7A4A"></div></div><span class="flow-bar-count">1</span></div>
-    </div>
-    <div style="overflow-x:auto">
-      <table>
-        <tr><th>Label</th><th>Process Type</th><th>API Name</th></tr>
-        <tr><td>Field Service: Manage Work Orders</td><td><span class="tag">Flow</span></td><td>ManageWorkOrders</td></tr><tr><td>Field Service: Update Appointment Arrival Window</td><td><span class="tag">AutoLaunchedFlow</span></td><td>ArrWin</td></tr><tr><td>Field Service: Cancel Service Appointment</td><td><span class="tag">AutoLaunchedFlow</span></td><td>CnclAppt</td></tr><tr><td>Field Service: Format Service Appointment Time for Display</td><td><span class="tag">AutoLaunchedFlow</span></td><td>CnvrtStTz</td></tr><tr><td>Field Service: Create Contact</td><td><span class="tag">AutoLaunchedFlow</span></td><td>CreateContact</td></tr><tr><td>Field Service: Delete Temporary Service Appointment</td><td><span class="tag">AutoLaunchedFlow</span></td><td>DeleteAppt</td></tr><tr><td>Field Service: Check Eligibility for Scheduling Changes</td><td><span class="tag">AutoLaunchedFlow</span></td><td>ElgChk</td></tr><tr><td>Field Service: Get Current Time</td><td><span class="tag">AutoLaunchedFlow</span></td><td>GetCurrentTime</td></tr><tr><td>Field Service: Get Service Appointment Identifier</td><td><span class="tag">AutoLaunchedFlow</span></td><td>GetSvcApptId</td></tr><tr><td>Field Service: Get Verified Contact ID</td><td><span class="tag">AutoLaunchedFlow</span></td><td>GtVrfCnt</td></tr><tr><td>Field Service: Get Appointment Information</td><td><span class="tag">AutoLaunchedFlow</span></td><td>Info</td></tr><tr><td>Field Service: Check If Agent Is External</td><td><span class="tag">AutoLaunchedFlow</span></td><td>IsExAg</td></tr><tr><td>Field Service: Match Work Type</td><td><span class="tag">AutoLaunchedFlow</span></td><td>MatchWorkType</td></tr><tr><td>Field Service: Create Service Appointment</td><td><span class="tag">AutoLaunchedFlow</span></td><td>NewAppt</td></tr><tr><td>Field Service: Schedule Service Appointment</td><td><span class="tag">AutoLaunchedFlow</span></td><td>Sched</td></tr><tr><td>Field Service: Send Confirmation to Customer</td><td><span class="tag">AutoLaunchedFlow</span></td><td>SendConf</td></tr><tr><td>Field Service: Send Verification Code</td><td><span class="tag">AutoLaunchedFlow</span></td><td>SendVerificationCode</td></tr><tr><td>Field Service: Get Appointment Time Slots</td><td><span class="tag">AutoLaunchedFlow</span></td><td>TmSlots</td></tr><tr><td>Field Service: Get Service Appointment Time Zone</td><td><span class="tag">AutoLaunchedFlow</span></td><td>TmZn</td></tr><tr><td>Field Service: Verify Code</td><td><span class="tag">AutoLaunchedFlow</span></td><td>VerifyCode</td></tr>
-      </table>
-      <div style="color:#6B7280;font-size:12px;padding-top:8px">Showing first 20 of 311 flows</div>
-    </div>
-  </div>
-</div>
-
-<!-- Scheduled + Async Jobs -->
-<div class="two-col">
+  <!-- Active Flows -->
   <div class="section">
-    <div class="section-header">Scheduled Jobs</div>
-    <div class="section-body" style="overflow-x:auto">
-      <table>
-        <tr><th>Name</th><th>State</th><th>Next Fire</th></tr>
-        <tr><td>ObligationCronJob</td><td><span style="color:#1A7A4A;font-weight:600">WAITING</span></td><td>2026-09-25 15:00</td></tr><tr><td>SRT Semantic Graph Edge Update Job for Org : 00Dg800000ETMhq</td><td><span style="color:#1A7A4A;font-weight:600">WAITING</span></td><td>2026-10-20 20:56</td></tr><tr><td>ReportType Edge Data Loader Job for Org : 00Dg800000ETMhq</td><td><span style="color:#1A7A4A;font-weight:600">WAITING</span></td><td>2026-09-29 19:18</td></tr><tr><td>Program Milestone Computation Cron Job</td><td><span style="color:#1A7A4A;font-weight:600">WAITING</span></td><td>2026-09-24 21:59</td></tr><tr><td>Program Status Update Cron Job</td><td><span style="color:#1A7A4A;font-weight:600">WAITING</span></td><td>2026-09-24 20:00</td></tr><tr><td>Retention Usage</td><td><span style="color:#1A7A4A;font-weight:600">WAITING</span></td><td>2026-09-25 15:00</td></tr><tr><td>Privacy Center Audit</td><td><span style="color:#1A7A4A;font-weight:600">WAITING</span></td><td>2026-09-24 19:00</td></tr>
-      </table>
-    </div>
-  </div>
-  <div class="section">
-    <div class="section-header">Async Apex Jobs (Recent 10)</div>
-    <div class="section-body" style="overflow-x:auto">
-      <table>
-        <tr><th>Type</th><th>Status</th><th>Errors</th><th>Created</th></tr>
-        <tr><td>Future</td><td><span style="color:#1A7A4A;font-weight:600">Completed</span></td><td>0</td><td>2026-09-20</td></tr><tr><td>ScheduledApex</td><td><span style="color:#B91C1C;font-weight:600">Aborted</span></td><td>0</td><td>2026-09-20</td></tr>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- Test Results -->
-<div class="section">
-  <div class="section-header">Apex Test Results</div>
-  <div class="section-body" style="overflow-x:auto">
+    <div class="section-title">Active Flows — 311 total (sample of 10)</div>
     <table>
-      <tr><th>Outcome</th><th>Count</th></tr>
-      <tr><td colspan="2" style="color:#B91C1C;text-align:center">No test results found</td></tr>
+      <tr><th>Label</th><th>Process Type</th></tr>
+      <tr><td>Field Service: Manage Work Orders Flow</td><td><span class="badge badge-blue">Flow</span></td></tr><tr><td>Field Service: Update Appointment Arrival Window</td><td><span class="badge badge-blue">AutoLaunchedFlow</span></td></tr><tr><td>Field Service: Cancel Service Appointment</td><td><span class="badge badge-blue">AutoLaunchedFlow</span></td></tr><tr><td>Field Service: Format Service Appointment Time</td><td><span class="badge badge-blue">AutoLaunchedFlow</span></td></tr><tr><td>Field Service: Create Contact</td><td><span class="badge badge-blue">AutoLaunchedFlow</span></td></tr><tr><td>Field Service: Delete Temporary Service Appt</td><td><span class="badge badge-blue">AutoLaunchedFlow</span></td></tr><tr><td>Field Service: Check Eligibility for Scheduling</td><td><span class="badge badge-blue">AutoLaunchedFlow</span></td></tr><tr><td>Field Service: Get Current Time</td><td><span class="badge badge-blue">AutoLaunchedFlow</span></td></tr><tr><td>Field Service: Get Service Appointment Identifier</td><td><span class="badge badge-blue">AutoLaunchedFlow</span></td></tr><tr><td>Field Service: Get Verified Contact ID</td><td><span class="badge badge-blue">AutoLaunchedFlow</span></td></tr>
     </table>
   </div>
-</div>
 
-<!-- Open PRs -->
-<div class="section">
-  <div class="section-header">Pull Requests — Open (1)</div>
-  <div class="section-body" style="overflow-x:auto">
+  <!-- Scheduled Jobs -->
+  <div class="section">
+    <div class="section-title">Scheduled Jobs (7)</div>
     <table>
-      <tr><th>Title</th><th>Branch</th><th>Author</th><th>Files</th><th>Changes</th></tr>
+      <tr><th>Name</th><th>State</th><th>Next Fire Time</th></tr>
+      <tr><td>ObligationCronJob</td><td><span class="badge badge-green">WAITING</span></td><td>2026-09-25 15:00:00 UTC</td></tr><tr><td>SRT Semantic Graph Edge Update Job</td><td><span class="badge badge-green">WAITING</span></td><td>2026-10-20 20:56:49 UTC</td></tr><tr><td>ReportType Edge Data Loader Job</td><td><span class="badge badge-green">WAITING</span></td><td>2026-09-29 19:18:00 UTC</td></tr><tr><td>Program Milestone Computation Cron Job</td><td><span class="badge badge-green">WAITING</span></td><td>2026-09-25 02:59:00 UTC</td></tr><tr><td>Program Status Update Cron Job</td><td><span class="badge badge-green">WAITING</span></td><td>2026-09-25 11:00:00 UTC</td></tr><tr><td>Retention Usage</td><td><span class="badge badge-green">WAITING</span></td><td>2026-09-25 15:00:00 UTC</td></tr><tr><td>Privacy Center Audit</td><td><span class="badge badge-green">WAITING</span></td><td>2026-09-25 02:00:00 UTC</td></tr>
+    </table>
+  </div>
+
+  <!-- Async Jobs -->
+  <div class="section">
+    <div class="section-title">Recent Async Jobs</div>
+    <table>
+      <tr><th>Job Type</th><th>Status</th><th>Created</th><th>Errors</th></tr>
+      <tr><td>Future</td><td><span class="badge badge-green">Completed</span></td><td>2026-09-20</td><td>0</td></tr><tr><td>ScheduledApex</td><td><span class="badge badge-red">Aborted</span></td><td>2026-09-20</td><td>0</td></tr>
+    </table>
+    <br>
+    <strong>Apex Test Results:</strong> <span style="color:#B91C1C">No test results found</span>
+  </div>
+
+  <!-- Open PRs -->
+  <div class="section">
+    <div class="section-title">Pull Requests — Open (1)</div>
+    <table>
+      <tr><th>Title</th><th>Branch</th><th>Author</th><th>Files</th><th>Changes</th><th>Reviews</th></tr>
       <tr>
-      <td><a href="https://github.com/Akshay-0502/Salesforce/pull/1" target="_blank" style="color:#1058B0">feat: DevOpsDashboardService — org health metrics Apex class</a></td>
+      <td><a href="https://github.com/Akshay-0502/Salesforce/pull/1" target="_blank">#1 feat: DevOpsDashboardService — org health metrics Apex class</a></td>
       <td><code>feature/testDevOpsDashboard</code> → <code>uat</code></td>
       <td>Akshay-0502</td>
-      <td>4 files</td>
+      <td>4</td>
       <td><span style="color:#1A7A4A">+63</span> / <span style="color:#B91C1C">-0</span></td>
+      <td><span class="badge badge-amber">Pending</span></td>
     </tr>
     </table>
   </div>
-</div>
 
-<!-- Merged PRs -->
-<div class="section">
-  <div class="section-header">Pull Requests — Merged Last 24h to UAT/Main</div>
-  <div class="section-body">
-    <div style="color:#1A7A4A;padding:8px 0">No PRs merged to UAT/main in the last 24 hours.</div>
+  <!-- Merged PRs -->
+  <div class="section">
+    <div class="section-title">Pull Requests — Merged Last 24h to UAT/Main</div>
+    <p style="color:#888;font-style:italic">No PRs merged to UAT or main in the last 24 hours.</p>
   </div>
-</div>
 
-<!-- Repository Overview -->
-<div class="section">
-  <div class="section-header">Repository Overview</div>
-  <div class="section-body">
-    <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:16px">
-      <div><strong>Repo:</strong> <a href="https://github.com/Akshay-0502/Salesforce" target="_blank" style="color:#1058B0">Akshay-0502/Salesforce</a></div>
-      <div><strong>Default Branch:</strong> main</div>
-      <div><strong>Stars:</strong> 0</div>
-      <div><strong>Forks:</strong> 0</div>
-      <div><strong>Open Issues:</strong> 1</div>
-    </div>
+  <!-- Repository Overview -->
+  <div class="section">
+    <div class="section-title">Repository Overview — Akshay-0502/Salesforce</div>
     <table>
-      <tr><th>Branch</th><th>Protected</th></tr>
-      <tr><td><code>feature/testDevOpsDashboard</code></td><td>—</td></tr><tr><td><code>main</code></td><td>—</td></tr><tr><td><code>uat</code></td><td>—</td></tr>
+      <tr><th>Branch</th></tr>
+      <tr><td>feature/testDevOpsDashboard</td></tr><tr><td><strong>main</strong></td></tr><tr><td>uat</td></tr>
     </table>
+    <br>
+    <a href="https://github.com/Akshay-0502/Salesforce" target="_blank">&#x1F517; View on GitHub</a>
   </div>
-</div>
 
 </div>
 <div class="footer">
-  Refreshed: 25 Sep 2026, 07:10 AM IST &nbsp;|&nbsp;
-  Org: trailsignup-b168ab0f0d1b03.my.salesforce.com &nbsp;|&nbsp;
+  Generated: 25 Sep 2026, 07:15 IST &nbsp;|&nbsp; Org: trailsignup-b168ab0f0d1b03.my.salesforce.com &nbsp;|&nbsp;
   Repo: Akshay-0502/Salesforce &nbsp;|&nbsp;
-  <a href="https://akshay-0502.github.io/Salesforce/" target="_blank">GitHub Pages ↗</a>
+  <a href="https://akshay-0502.github.io/Salesforce/" target="_blank">GitHub Pages</a>
 </div>
 </body>
 </html>
