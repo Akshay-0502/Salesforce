@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -20,19 +22,16 @@ jobs:
 
       - name: Build dashboard
         env:
-          # Org 1 (required)
-          SF_INSTANCE_URL:  ${{ secrets.SF_INSTANCE_URL }}
-          SF_CLIENT_ID:     ${{ secrets.SF_CLIENT_ID }}
-          SF_CLIENT_SECRET: ${{ secrets.SF_CLIENT_SECRET }}
-          SF_ORG1_LABEL:    ${{ secrets.SF_ORG1_LABEL }}   # optional display name, e.g. "Trailsignup"
-          # Org 2 (optional — add secrets to enable second tab)
-          SF2_INSTANCE_URL: ${{ secrets.SF2_INSTANCE_URL }}
-          SF2_CLIENT_ID:    ${{ secrets.SF2_CLIENT_ID }}
+          SF_INSTANCE_URL:   ${{ secrets.SF_INSTANCE_URL }}
+          SF_CLIENT_ID:      ${{ secrets.SF_CLIENT_ID }}
+          SF_CLIENT_SECRET:  ${{ secrets.SF_CLIENT_SECRET }}
+          SF_ORG1_LABEL:     ${{ secrets.SF_ORG1_LABEL }}
+          SF2_INSTANCE_URL:  ${{ secrets.SF2_INSTANCE_URL }}
+          SF2_CLIENT_ID:     ${{ secrets.SF2_CLIENT_ID }}
           SF2_CLIENT_SECRET: ${{ secrets.SF2_CLIENT_SECRET }}
-          SF_ORG2_LABEL:    ${{ secrets.SF_ORG2_LABEL }}   # optional display name, e.g. "Production"
-          # GitHub + Slack
-          GH_TOKEN:         ${{ secrets.GH_PAT }}
-          SLACK_WEBHOOK:    ${{ secrets.SLACK_WEBHOOK }}
+          SF_ORG2_LABEL:     ${{ secrets.SF_ORG2_LABEL }}
+          GH_TOKEN:          ${{ secrets.GH_PAT }}
+          SLACK_WEBHOOK:     ${{ secrets.SLACK_WEBHOOK }}
         run: python scripts/build_dashboard.py
 
       - name: Commit and push updated dashboard
@@ -40,6 +39,11 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/index.html
-          git diff --cached --quiet || git commit -m "chore: auto-refresh dashboard [$(date -u '+%Y-%m-%d %H:%M UTC')]"
-          git pull --rebase origin main
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "chore: auto-refresh dashboard [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && break || sleep 5
+          done
