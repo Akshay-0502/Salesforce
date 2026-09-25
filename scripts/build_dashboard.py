@@ -132,14 +132,16 @@ total_max_pts = sum(f[2] for f in factors)
 green_pts = sum(f[1] for f in factors if f[3] == "hf-pass")
 warn_pts  = sum(f[1] for f in factors if f[3] == "hf-warn")
 fail_pts  = sum(f[1] for f in factors if f[3] == "hf-fail")
-g_arc = round(green_pts / total_max_pts * 100, 1) if total_max_pts else 0
-w_arc = round(warn_pts  / total_max_pts * 100, 1) if total_max_pts else 0
-r_arc = round(fail_pts  / total_max_pts * 100, 1) if total_max_pts else 0
+# Scale to fill full circle (no grey gap)
+total_pts = green_pts + warn_pts + fail_pts or 1
+g_arc = round(green_pts / total_pts * 100, 1)
+w_arc = round(warn_pts  / total_pts * 100, 1)
+r_arc = round(100 - g_arc - w_arc, 1)  # remainder ensures full circle
 # each arc starts where previous ended; dashoffset 25 = start at top
 g_offset = 25
 w_offset = round(25 - g_arc, 1)
 r_offset = round(25 - g_arc - w_arc, 1)
-# remaining space for each arc (100 - arc = empty portion)
+# each arc's empty portion = 100 - its own length
 g_rest = round(100 - g_arc, 1)
 w_rest = round(100 - w_arc, 1)
 r_rest = round(100 - r_arc, 1)
