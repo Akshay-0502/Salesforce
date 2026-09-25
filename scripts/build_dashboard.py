@@ -312,7 +312,12 @@ html = f"""<!DOCTYPE html>
     <div class="topbar-logo">Griffith <span>University</span></div>
     <div class="topbar-badge">Trailsignup Org · Live</div>
   </div>
-  <div class="topbar-right"><span class="live-dot"></span>Data pulled: {TODAY} · Org: trailsignup-b168ab0f0d1b03</div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div style="background:{hc};color:#fff;border-radius:20px;padding:3px 14px;font-size:12px;font-weight:700;letter-spacing:0.3px">
+      Health {score}% &nbsp;·&nbsp; {health_label}
+    </div>
+    <div class="topbar-right"><span class="live-dot"></span>Data pulled: {TODAY} · Org: trailsignup-b168ab0f0d1b03</div>
+  </div>
 </div>
 <div class="wrapper">
   <div class="page-title">DevOps Metrics</div>
@@ -327,15 +332,17 @@ html = f"""<!DOCTYPE html>
         <circle cx="18" cy="18" r="15.9" fill="none" stroke="#E5E7EB" stroke-width="4"/>
         <circle cx="18" cy="18" r="15.9" fill="none" stroke="{hc}" stroke-width="4"
           stroke-dasharray="{arc_filled} {arc_empty}" stroke-dashoffset="25" stroke-linecap="round"/>
+        <text x="18" y="17.5" text-anchor="middle" font-size="7" font-weight="800" fill="{hc}">{score}%</text>
+        <text x="18" y="23" text-anchor="middle" font-size="3.5" fill="#6B7A8D">Health</text>
       </svg>
     </div>
     <div class="health-score-num">
-      <div class="score">{score}</div>
+      <div class="score">{score}%</div>
       <div class="score-grade">{health_label}</div>
-      <div class="score-label">Org Health Score</div>
+      <div class="score-label">Org Health Score (0–100)</div>
     </div>
     <div class="health-detail">
-      <div class="health-title">Score breakdown — based on live org data</div>
+      <div class="health-title">Score breakdown — {score}% health based on live Salesforce org data ({total_earned}/{total_max} pts)</div>
       <div class="health-factors">{factor_html}</div>
     </div>
   </div>
