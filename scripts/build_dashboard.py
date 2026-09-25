@@ -127,9 +127,22 @@ if score >= 80:   hlabel, hc, hc_score = "Healthy",         "#1A7A4A", "#1A7A4A"
 elif score >= 60: hlabel, hc, hc_score = "Good",            "#B45309", "#B45309"
 else:             hlabel, hc, hc_score = "Needs Attention", "#B91C1C", "#B91C1C"
 
-# donut: single arc, score% filled, correct colour
-arc_on  = score
-arc_off = 100 - score
+# Multi-arc donut: green / amber / red proportional to earned points per tier
+total_max_pts = sum(f[2] for f in factors)
+green_pts = sum(f[1] for f in factors if f[3] == "hf-pass")
+warn_pts  = sum(f[1] for f in factors if f[3] == "hf-warn")
+fail_pts  = sum(f[1] for f in factors if f[3] == "hf-fail")
+g_arc = round(green_pts / total_max_pts * 100, 1) if total_max_pts else 0
+w_arc = round(warn_pts  / total_max_pts * 100, 1) if total_max_pts else 0
+r_arc = round(fail_pts  / total_max_pts * 100, 1) if total_max_pts else 0
+# each arc starts where previous ended; dashoffset 25 = start at top
+g_offset = 25
+w_offset = round(25 - g_arc, 1)
+r_offset = round(25 - g_arc - w_arc, 1)
+# remaining space for each arc (100 - arc = empty portion)
+g_rest = round(100 - g_arc, 1)
+w_rest = round(100 - w_arc, 1)
+r_rest = round(100 - r_arc, 1)
 
 # ── Slack alert ──
 if score < 60 and SLACK_WEBHOOK:
@@ -355,8 +368,12 @@ html = f"""<!DOCTYPE html>
     <div class="health-donut">
       <svg width="130" height="130" viewBox="0 0 36 36">
         <circle cx="18" cy="18" r="15.9" fill="none" stroke="#EEF3FB" stroke-width="4"/>
-        <circle cx="18" cy="18" r="15.9" fill="none" stroke="{hc}" stroke-width="4"
-          stroke-dasharray="{arc_on} {arc_off}" stroke-dashoffset="25" stroke-linecap="round"/>
+        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#1A7A4A" stroke-width="4"
+          stroke-dasharray="{g_arc} {g_rest}" stroke-dashoffset="{g_offset}" stroke-linecap="round"/>
+        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#F59E0B" stroke-width="4"
+          stroke-dasharray="{w_arc} {w_rest}" stroke-dashoffset="{w_offset}" stroke-linecap="round"/>
+        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#B91C1C" stroke-width="4"
+          stroke-dasharray="{r_arc} {r_rest}" stroke-dashoffset="{r_offset}" stroke-linecap="round"/>
         <text x="18" y="17" text-anchor="middle" font-size="8" font-weight="800" fill="#0B3D7A">{score}</text>
         <text x="18" y="22" text-anchor="middle" font-size="4" fill="#6B7A8D">/100</text>
       </svg>
