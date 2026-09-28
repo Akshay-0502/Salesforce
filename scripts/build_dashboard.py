@@ -11,14 +11,14 @@ TODAY   = (datetime.datetime.utcnow() + datetime.timedelta(hours=5, minutes=30))
 ORGS = []
 if os.environ.get("SF_INSTANCE_URL"):
     ORGS.append({
-        "label":    os.environ.get("SF_ORG1_LABEL", "Trailsignup"),
+        "label":    os.environ.get("SF_ORG1_LABEL") or "Trailsignup",
         "instance": os.environ["SF_INSTANCE_URL"].rstrip("/"),
         "client_id":  os.environ["SF_CLIENT_ID"],
         "client_sec": os.environ["SF_CLIENT_SECRET"],
     })
 if os.environ.get("SF2_INSTANCE_URL"):
     ORGS.append({
-        "label":    os.environ.get("SF_ORG2_LABEL", "Org 2"),
+        "label":    os.environ.get("SF_ORG2_LABEL") or "Org 2",
         "instance": os.environ["SF2_INSTANCE_URL"].rstrip("/"),
         "client_id":  os.environ["SF2_CLIENT_ID"],
         "client_sec": os.environ["SF2_CLIENT_SECRET"],
