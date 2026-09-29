@@ -1,0 +1,99 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  Salesforce DevOps Metrics Dashboard — Azure Pipelines
+#  Repo  : https://dev.azure.com/griffith-SalesforceCRM/RSDF-SalesforcePlatform
+#  Runs  : Every 6 hours  |  Manual trigger available
+# ─────────────────────────────────────────────────────────────────────────────
+
+trigger: none          # No push-based trigger — data refreshes only on schedule
+
+schedules:
+  - cron: '0 0,6,12,18 * * *'
+    displayName: 'Refresh every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC)'
+    branches:
+      include:
+        - main
+    always: true       # Run even when there are no code changes
+
+variables:
+  - group: salesforce-devops-secrets   # Variable Group name — create this in Pipelines > Library
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+  # ── 1. Checkout ─────────────────────────────────────────────────────────────
+  - checkout: self
+    persistCredentials: true    # Lets subsequent git push use the pipeline identity
+    fetchDepth: 0
+
+  # ── 2. Python setup ─────────────────────────────────────────────────────────
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.11'
+    displayName: 'Use Python 3.11'
+
+  # ── 3. Install dependencies ──────────────────────────────────────────────────
+  - script: pip install requests
+    displayName: 'Install Python dependencies'
+
+  # ── 4a. Build the multi-org dashboard (GitHub Pages) ────────────────────────
+  - script: python scripts/build_dashboard.py
+    displayName: 'Build multi-org dashboard (index.html)'
+    env:
+      # Org 1 — Trailsignup
+      SF_INSTANCE_URL:    $(SF_INSTANCE_URL)
+      SF_CLIENT_ID:       $(SF_CLIENT_ID)
+      SF_CLIENT_SECRET:   $(SF_CLIENT_SECRET)
+      SF_ORG1_LABEL:      $(SF_ORG1_LABEL)
+      # Org 2 — DashboardSandbox
+      SF2_INSTANCE_URL:   $(SF2_INSTANCE_URL)
+      SF2_CLIENT_ID:      $(SF2_CLIENT_ID)
+      SF2_CLIENT_SECRET:  $(SF2_CLIENT_SECRET)
+      SF_ORG2_LABEL:      $(SF_ORG2_LABEL)
+      # Org 3 — Griffith SIT (or leave blank if using build_griffith.py instead)
+      SF3_INSTANCE_URL:   $(SF3_INSTANCE_URL)
+      SF3_CLIENT_ID:      $(SF3_CLIENT_ID)
+      SF3_CLIENT_SECRET:  $(SF3_CLIENT_SECRET)
+      SF_ORG3_LABEL:      $(SF_ORG3_LABEL)
+      GH_TOKEN:           $(GH_TOKEN)
+      SLACK_WEBHOOK:      $(SLACK_WEBHOOK)
+
+  # ── 4b. Build the Griffith SIT dashboard (with baked-in ADO PRs) ────────────
+  - script: python scripts/build_griffith.py
+    displayName: 'Build Griffith SIT dashboard (griffith_dashboard.html)'
+    env:
+      SF_INSTANCE_URL:    $(SF_INSTANCE_URL)      # Griffith SIT Sandbox URL
+      SF_CLIENT_ID:       $(SF_CLIENT_ID)
+      SF_CLIENT_SECRET:   $(SF_CLIENT_SECRET)
+      # ADO settings — PRs targeting the sit branch are fetched here and baked in
+      ADO_ORG:            griffith-SalesforceCRM
+      ADO_PROJECT:        RSDF-SalesforcePlatform
+      ADO_REPO:           RSDF-SalesforcePlatform
+      ADO_PAT:            $(ADO_PAT)              # Add ADO_PAT to Variable Group
+      ADO_SIT_BRANCH:     sit
+
+  # ── 5. Commit & push updated dashboard back to repo ─────────────────────────
+  - script: |
+      git config user.name  "Azure Pipelines"
+      git config user.email "azuredevops@griffith-SalesforceCRM.visualstudio.com"
+      git add docs/index.html docs/griffith_dashboard.html
+      if git diff --cached --quiet; then
+        echo "No changes to commit — data unchanged since last run"
+        exit 0
+      fi
+      git commit -m "chore: auto-refresh dashboard [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+      # Retry loop handles rare concurrent push conflicts
+      for i in 1 2 3; do
+        git pull --rebase origin main && git push && break || sleep 5
+      done
+    displayName: 'Commit and push updated dashboard'
+
+  # ── 6. Deploy to Azure Static Web Apps ──────────────────────────────────────
+  - task: AzureStaticWebApp@0
+    displayName: 'Deploy to Azure Static Web Apps'
+    inputs:
+      azure_static_web_apps_api_token: $(STATIC_WEB_APP_TOKEN)
+      app_location: 'docs'         # Folder containing index.html
+      skip_app_build: true         # HTML is pre-built by the Python script above
+      output_location: ''
