@@ -1,10 +1,11 @@
 # ─────────────────────────────────────────────────────────────────────────────
-#  Salesforce DevOps Metrics Dashboard — Azure Pipelines
+#  Griffith University — Salesforce DevOps Metrics Dashboard
 #  Repo  : https://dev.azure.com/griffith-SalesforceCRM/RSDF-SalesforcePlatform
 #  Runs  : Every 6 hours  |  Manual trigger available
+#  Hosts : Azure Static Web Apps
 # ─────────────────────────────────────────────────────────────────────────────
 
-trigger: none          # No push-based trigger — data refreshes only on schedule
+trigger: none          # No push-based trigger — data refreshes on schedule only
 
 schedules:
   - cron: '0 0,6,12,18 * * *'
@@ -15,85 +16,64 @@ schedules:
     always: true       # Run even when there are no code changes
 
 variables:
-  - group: salesforce-devops-secrets   # Variable Group name — create this in Pipelines > Library
+  - group: salesforce-devops-secrets   # Pipelines > Library > salesforce-devops-secrets
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
 
-  # ── 1. Checkout ─────────────────────────────────────────────────────────────
+  # ── 1. Checkout ──────────────────────────────────────────────────────────────
   - checkout: self
-    persistCredentials: true    # Lets subsequent git push use the pipeline identity
+    persistCredentials: true
     fetchDepth: 0
 
-  # ── 2. Python setup ─────────────────────────────────────────────────────────
+  # ── 2. Python setup ──────────────────────────────────────────────────────────
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.11'
     displayName: 'Use Python 3.11'
 
-  # ── 3. Install dependencies ──────────────────────────────────────────────────
+  # ── 3. Install dependencies ───────────────────────────────────────────────────
   - script: pip install requests
     displayName: 'Install Python dependencies'
 
-  # ── 4a. Build the multi-org dashboard (GitHub Pages) ────────────────────────
-  - script: python scripts/build_dashboard.py
-    displayName: 'Build multi-org dashboard (index.html)'
-    env:
-      # Org 1 — Trailsignup
-      SF_INSTANCE_URL:    $(SF_INSTANCE_URL)
-      SF_CLIENT_ID:       $(SF_CLIENT_ID)
-      SF_CLIENT_SECRET:   $(SF_CLIENT_SECRET)
-      SF_ORG1_LABEL:      $(SF_ORG1_LABEL)
-      # Org 2 — DashboardSandbox
-      SF2_INSTANCE_URL:   $(SF2_INSTANCE_URL)
-      SF2_CLIENT_ID:      $(SF2_CLIENT_ID)
-      SF2_CLIENT_SECRET:  $(SF2_CLIENT_SECRET)
-      SF_ORG2_LABEL:      $(SF_ORG2_LABEL)
-      # Org 3 — Griffith SIT (or leave blank if using build_griffith.py instead)
-      SF3_INSTANCE_URL:   $(SF3_INSTANCE_URL)
-      SF3_CLIENT_ID:      $(SF3_CLIENT_ID)
-      SF3_CLIENT_SECRET:  $(SF3_CLIENT_SECRET)
-      SF_ORG3_LABEL:      $(SF_ORG3_LABEL)
-      GH_TOKEN:           $(GH_TOKEN)
-      SLACK_WEBHOOK:      $(SLACK_WEBHOOK)
-
-  # ── 4b. Build the Griffith SIT dashboard (with baked-in ADO PRs) ────────────
+  # ── 4. Build the Griffith SIT dashboard ──────────────────────────────────────
+  #       Fetches live Salesforce data + ADO PRs targeting sit branch,
+  #       writes the result to docs/index.html ready for Static Web Apps.
   - script: python scripts/build_griffith.py
-    displayName: 'Build Griffith SIT dashboard (griffith_dashboard.html)'
+    displayName: 'Build Griffith SIT dashboard'
     env:
-      SF_INSTANCE_URL:    $(SF_INSTANCE_URL)      # Griffith SIT Sandbox URL
-      SF_CLIENT_ID:       $(SF_CLIENT_ID)
-      SF_CLIENT_SECRET:   $(SF_CLIENT_SECRET)
-      # ADO settings — PRs targeting the sit branch are fetched here and baked in
-      ADO_ORG:            griffith-SalesforceCRM
-      ADO_PROJECT:        RSDF-SalesforcePlatform
-      ADO_REPO:           RSDF-SalesforcePlatform
-      ADO_PAT:            $(ADO_PAT)              # Add ADO_PAT to Variable Group
-      ADO_SIT_BRANCH:     sit
+      SF_INSTANCE_URL:  $(SF_INSTANCE_URL)    # https://griffith--sit.sandbox.my.salesforce.com
+      SF_CLIENT_ID:     $(SF_CLIENT_ID)        # Connected App consumer key
+      SF_CLIENT_SECRET: $(SF_CLIENT_SECRET)    # Connected App consumer secret
+      ADO_ORG:          griffith-SalesforceCRM
+      ADO_PROJECT:      RSDF-SalesforcePlatform
+      ADO_REPO:         RSDF-SalesforcePlatform
+      ADO_PAT:          $(ADO_PAT)             # PAT with Code (Read) scope
+      ADO_SIT_BRANCH:   sit
+      SLACK_WEBHOOK:    $(SLACK_WEBHOOK)        # Optional — leave blank to skip
 
-  # ── 5. Commit & push updated dashboard back to repo ─────────────────────────
+  # ── 5. Commit & push updated dashboard back to repo ──────────────────────────
   - script: |
       git config user.name  "Azure Pipelines"
       git config user.email "azuredevops@griffith-SalesforceCRM.visualstudio.com"
-      git add docs/index.html docs/griffith_dashboard.html
+      git add docs/index.html
       if git diff --cached --quiet; then
         echo "No changes to commit — data unchanged since last run"
         exit 0
       fi
       git commit -m "chore: auto-refresh dashboard [$(date -u '+%Y-%m-%d %H:%M UTC')]"
-      # Retry loop handles rare concurrent push conflicts
       for i in 1 2 3; do
         git pull --rebase origin main && git push && break || sleep 5
       done
     displayName: 'Commit and push updated dashboard'
 
-  # ── 6. Deploy to Azure Static Web Apps ──────────────────────────────────────
+  # ── 6. Deploy to Azure Static Web Apps ───────────────────────────────────────
   - task: AzureStaticWebApp@0
     displayName: 'Deploy to Azure Static Web Apps'
     inputs:
       azure_static_web_apps_api_token: $(STATIC_WEB_APP_TOKEN)
-      app_location: 'docs'         # Folder containing index.html
-      skip_app_build: true         # HTML is pre-built by the Python script above
+      app_location: 'docs'
+      skip_app_build: true
       output_location: ''
