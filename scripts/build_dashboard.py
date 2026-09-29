@@ -23,6 +23,13 @@ if os.environ.get("SF2_INSTANCE_URL"):
         "client_id":  os.environ["SF2_CLIENT_ID"],
         "client_sec": os.environ["SF2_CLIENT_SECRET"],
     })
+if os.environ.get("SF3_INSTANCE_URL"):
+    ORGS.append({
+        "label":    os.environ.get("SF_ORG3_LABEL") or "Org 3",
+        "instance": os.environ["SF3_INSTANCE_URL"].rstrip("/"),
+        "client_id":  os.environ["SF3_CLIENT_ID"],
+        "client_sec": os.environ["SF3_CLIENT_SECRET"],
+    })
 
 # ── API helpers ──
 def sf_auth(org):
