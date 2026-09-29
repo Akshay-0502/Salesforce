@@ -100,7 +100,7 @@
     <button class="org-tab active" onclick="switchOrg(0)" id="tab-0">
       <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#1A7A4A;margin-right:6px;vertical-align:middle"></span>
       Trailsignup
-      <span style="font-size:10px;margin-left:4px;opacity:.8">89/100</span>
+      <span style="font-size:10px;margin-left:4px;opacity:.8">83/100</span>
     </button><button class="org-tab" onclick="switchOrg(1)" id="tab-1">
       <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#B45309;margin-right:6px;vertical-align:middle"></span>
       DashboardSandbox
@@ -117,7 +117,7 @@
   <div class="refresh-banner">
     <span class="refresh-icon">&#x21bb;</span>
     <span class="refresh-label">Last Refreshed from Production</span>
-    <span class="refresh-value">29 Sep 2026, 00:40 IST</span>
+    <span class="refresh-value">29 Sep 2026, 09:28 IST</span>
   </div>
   <div class="org-panel" id="panel-0" style="display:block">
   
@@ -126,23 +126,23 @@
       <svg width="130" height="130" viewBox="0 0 36 36">
         <circle cx="18" cy="18" r="15.9" fill="none" stroke="#EEF3FB" stroke-width="4"/>
         <circle cx="18" cy="18" r="15.9" fill="none" stroke="#1A7A4A" stroke-width="4"
-          stroke-dasharray="93.8 6.2" stroke-dashoffset="25" stroke-linecap="round"/>
+          stroke-dasharray="86.7 13.3" stroke-dashoffset="25" stroke-linecap="round"/>
         <circle cx="18" cy="18" r="15.9" fill="none" stroke="#F59E0B" stroke-width="4"
-          stroke-dasharray="6.2 93.8" stroke-dashoffset="-68.8" stroke-linecap="round"/>
+          stroke-dasharray="13.3 86.7" stroke-dashoffset="-61.7" stroke-linecap="round"/>
         <circle cx="18" cy="18" r="15.9" fill="none" stroke="#B91C1C" stroke-width="4"
-          stroke-dasharray="0.0 100.0" stroke-dashoffset="-75.0" stroke-linecap="round"/>
-        <text x="18" y="17" text-anchor="middle" font-size="8" font-weight="800" fill="#0B3D7A">89</text>
+          stroke-dasharray="-0.0 100.0" stroke-dashoffset="-75.0" stroke-linecap="round"/>
+        <text x="18" y="17" text-anchor="middle" font-size="8" font-weight="800" fill="#0B3D7A">83</text>
         <text x="18" y="22" text-anchor="middle" font-size="4" fill="#6B7A8D">/100</text>
       </svg>
     </div>
     <div class="health-score-num">
-      <div class="score" style="color:#1A7A4A">89</div>
+      <div class="score" style="color:#1A7A4A">83</div>
       <div class="score-grade" style="color:#1A7A4A">Healthy</div>
       <div class="score-label">Org Health Score</div>
     </div>
     <div class="health-detail">
       <div class="health-title">Score breakdown — based on live org data</div>
-      <div class="health-factors"><div class="hf"><div class="hf-dot hf-pass"></div>API limits well within threshold (+15)</div><div class="hf"><div class="hf-dot hf-pass"></div>Data & file storage healthy (+10)</div><div class="hf"><div class="hf-dot hf-pass"></div>All 323 flows active (+15)</div><div class="hf"><div class="hf-dot hf-pass"></div>All 7 scheduled jobs WAITING (+10)</div><div class="hf"><div class="hf-dot hf-pass"></div>32 active Apex classes, 0 errors (+10)</div><div class="hf"><div class="hf-dot hf-pass"></div>No triggers — flow-first architecture (+5)</div><div class="hf"><div class="hf-dot hf-pass"></div>No aborted async jobs (+10)</div><div class="hf"><div class="hf-dot hf-warn"></div>No Apex test results / coverage data</div></div>
+      <div class="health-factors"><div class="hf"><div class="hf-dot hf-pass"></div>API limits well within threshold (+15)</div><div class="hf"><div class="hf-dot hf-pass"></div>Data & file storage healthy (+10)</div><div class="hf"><div class="hf-dot hf-pass"></div>All 323 flows active (+15)</div><div class="hf"><div class="hf-dot hf-pass"></div>All 7 scheduled jobs WAITING (+10)</div><div class="hf"><div class="hf-dot hf-pass"></div>32 active Apex classes, 0 errors (+10)</div><div class="hf"><div class="hf-dot hf-pass"></div>No triggers — flow-first architecture (+5)</div><div class="hf"><div class="hf-dot hf-warn"></div>1 aborted async job(s)</div><div class="hf"><div class="hf-dot hf-warn"></div>No Apex test results / coverage data</div></div>
     </div>
   </div>
   <div class="kpi-strip">
@@ -179,7 +179,7 @@
           <tr><td>Apex Triggers</td><td><span class="pill" style="background:var(--blue-light);color:var(--blue)">Info</span></td><td>0 triggers — flow-first architecture</td></tr>
           <tr><td>Active Flows</td><td><span class="pill" style="background:var(--green-bg);color:var(--green)">Pass</span></td><td>323 active flows</td></tr>
           <tr><td>Scheduled Jobs</td><td><span class="pill" style="background:var(--green-bg);color:var(--green)">Pass</span></td><td>7 jobs, all WAITING</td></tr>
-          <tr><td>Async Apex Jobs</td><td><span class="pill" style="background:var(--green-bg);color:var(--green)">Pass</span></td><td>All completed successfully</td></tr>
+          <tr><td>Async Apex Jobs</td><td><span class="pill" style="background:var(--amber-bg);color:var(--amber)">Review</span></td><td>1 Aborted job(s)</td></tr>
           <tr><td>Apex Test Results</td><td><span class="pill" style="background:var(--amber-bg);color:var(--amber)">No Data</span></td><td>No test runs found</td></tr>
         </tbody></table>
       </div>
@@ -194,7 +194,7 @@
         </div>
         <div class="user-row"><div class="avatar">AK</div>
           <div class="user-info"><div class="user-name">Akshay Kumar</div>
-          <div class="user-meta">Standard · Created 2026-08-19 · Last login: <span style="color:var(--green)">2026-09-28</span></div></div>
+          <div class="user-meta">Standard · Created 2026-08-19 · Last login: <span style="color:var(--green)">2026-09-29</span></div></div>
           <span class="pill" style="background:var(--green-bg);color:var(--green)">Active</span></div><div class="user-row"><div class="avatar">CE</div>
           <div class="user-info"><div class="user-name">Chatter Expert</div>
           <div class="user-meta">CsnOnly · Created 2026-08-19 · Last login: <span style="color:#B91C1C">Never</span></div></div>
@@ -215,14 +215,14 @@
     <div class="card">
       <div class="card-head"><div class="card-title">Scheduled Jobs</div><div class="card-meta">7 jobs · all WAITING</div></div>
       <div class="card-body"><div class="job-row"><div class="job-icon">&#9201;</div>
-      <div class="job-info"><div class="job-name">Program Status Update Cron Job</div>
-      <div class="job-meta">Next run: 2026-09-28T20:00 UTC</div></div>
-      <span class="pill" style="background:var(--green-bg);color:var(--green)">Waiting</span></div><div class="job-row"><div class="job-icon">&#9201;</div>
       <div class="job-info"><div class="job-name">Privacy Center Audit</div>
-      <div class="job-meta">Next run: 2026-09-28T20:00 UTC</div></div>
+      <div class="job-meta">Next run: 2026-09-29T04:00 UTC</div></div>
       <span class="pill" style="background:var(--green-bg);color:var(--green)">Waiting</span></div><div class="job-row"><div class="job-icon">&#9201;</div>
       <div class="job-info"><div class="job-name">Program Milestone Computation Cron Job</div>
-      <div class="job-meta">Next run: 2026-09-28T21:59 UTC</div></div>
+      <div class="job-meta">Next run: 2026-09-29T07:59 UTC</div></div>
+      <span class="pill" style="background:var(--green-bg);color:var(--green)">Waiting</span></div><div class="job-row"><div class="job-icon">&#9201;</div>
+      <div class="job-info"><div class="job-name">Program Status Update Cron Job</div>
+      <div class="job-meta">Next run: 2026-09-29T11:00 UTC</div></div>
       <span class="pill" style="background:var(--green-bg);color:var(--green)">Waiting</span></div><div class="job-row"><div class="job-icon">&#9201;</div>
       <div class="job-info"><div class="job-name">ObligationCronJob</div>
       <div class="job-meta">Next run: 2026-09-29T15:00 UTC</div></div>
@@ -240,8 +240,8 @@
     <div class="card">
       <div class="card-head"><div class="card-title">Async Apex Jobs &amp; Deployment Activity</div><div class="card-meta">Recent job history</div></div>
       <div class="card-body">
-        <table style="margin-bottom:14px"><thead><tr><th>Job</th><th>Type</th><th>Status</th><th>Date</th><th>Errors</th></tr></thead><tbody><tr><td colspan='5' style='text-align:center;color:#999'>No async jobs</td></tr></tbody></table>
-        <div class="info-banner green">&#10003; No failed or aborted async jobs.</div><br>
+        <table style="margin-bottom:14px"><thead><tr><th>Job</th><th>Type</th><th>Status</th><th>Date</th><th>Errors</th></tr></thead><tbody><tr><td>Future</td><td>Future</td><td><span class="pill" style="background:var(--green-bg);color:var(--green)">Completed</span></td><td>2026-09-28</td><td>0</td></tr><tr><td>ScheduledApex</td><td>ScheduledApex</td><td><span class="pill" style="background:var(--red-bg);color:var(--red)">Aborted</span></td><td>2026-09-28</td><td>0</td></tr></tbody></table>
+        <div class="info-banner amber">&#9888; 1 async job(s) aborted recently.</div><br>
         <div style="font-size:12px;font-weight:600;color:var(--slate);margin-bottom:10px">Test Coverage Status</div>
         <div class='info-banner amber'>&#9888; No Apex test results found. Run All Tests from Setup.</div>
       </div>
@@ -343,7 +343,7 @@
         </div>
         <div class="user-row"><div class="avatar">TU</div>
           <div class="user-info"><div class="user-name">Trail User</div>
-          <div class="user-meta">Standard · Created 2026-06-17 · Last login: <span style="color:var(--green)">2026-09-28</span></div></div>
+          <div class="user-meta">Standard · Created 2026-06-17 · Last login: <span style="color:var(--green)">2026-09-29</span></div></div>
           <span class="pill" style="background:var(--green-bg);color:var(--green)">Active</span></div><div class="user-row"><div class="avatar">AP</div>
           <div class="user-info"><div class="user-name">Automated Process</div>
           <div class="user-meta">AutomatedProcess · Created 2026-06-17 · Last login: <span style="color:#B91C1C">Never</span></div></div>
@@ -365,13 +365,13 @@
       <div class="card-head"><div class="card-title">Scheduled Jobs</div><div class="card-meta">3 jobs · all WAITING</div></div>
       <div class="card-body"><div class="job-row"><div class="job-icon">&#9201;</div>
       <div class="job-info"><div class="job-name">Program Milestone Computation Cron Job</div>
-      <div class="job-meta">Next run: 2026-09-28T23:59 UTC</div></div>
-      <span class="pill" style="background:var(--green-bg);color:var(--green)">Waiting</span></div><div class="job-row"><div class="job-icon">&#9201;</div>
-      <div class="job-info"><div class="job-name">Program Status Update Cron Job</div>
-      <div class="job-meta">Next run: 2026-09-29T03:00 UTC</div></div>
+      <div class="job-meta">Next run: 2026-09-29T06:59 UTC</div></div>
       <span class="pill" style="background:var(--green-bg);color:var(--green)">Waiting</span></div><div class="job-row"><div class="job-icon">&#9201;</div>
       <div class="job-info"><div class="job-name">Metalytics Data Loader Job for Org : 00Dg7000008k3UX</div>
       <div class="job-meta">Next run: 2026-09-29T09:11 UTC</div></div>
+      <span class="pill" style="background:var(--green-bg);color:var(--green)">Waiting</span></div><div class="job-row"><div class="job-icon">&#9201;</div>
+      <div class="job-info"><div class="job-name">Program Status Update Cron Job</div>
+      <div class="job-meta">Next run: 2026-09-29T12:00 UTC</div></div>
       <span class="pill" style="background:var(--green-bg);color:var(--green)">Waiting</span></div><div class="info-banner green">&#10003; All scheduled jobs are in healthy WAITING state.</div></div>
     </div>
     <div class="card">
@@ -407,7 +407,7 @@
   </div>
 </div>
   <div class="dash-footer">
-    Griffith University DevOps Metrics &nbsp;·&nbsp; Repo: Akshay-0502/Salesforce &nbsp;·&nbsp; Powered by GitHub Actions &nbsp;·&nbsp; Refreshed: 29 Sep 2026, 00:40 IST
+    Griffith University DevOps Metrics &nbsp;·&nbsp; Repo: Akshay-0502/Salesforce &nbsp;·&nbsp; Powered by GitHub Actions &nbsp;·&nbsp; Refreshed: 29 Sep 2026, 09:28 IST
   </div>
 </div>
 <script>
